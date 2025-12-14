@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Manovastra - Premium Sarees{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="container">
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M1 19h22M1 12h22M1 5h22" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+            </button>
+
+            <!-- Logo -->
+            <div class="header-logo">
+                <a href="/">
+                    <img src="/static/Images/Manovastra.png" alt="Manovastra Logo">
+                </a>
+            </div>
+
+            <!-- Primary Navigation (Desktop) -->
+            <nav class="header-nav">
+                <ul class="nav-list">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Categories</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Sarees</a></li>
+                            <li><a href="#">Kurta Set</a></li>
+                            <li><a href="#">Kurtis</a></li>
+                            <li><a href="#">Gowns</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Best Selling Sarees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Latest Sarees Collection</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Wedding Picks</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Haldi Wear</a></li>
+                            <li><a href="#">Mehndi Wear</a></li>
+                            <li><a href="#">Sangeet Wear</a></li>
+                            <li><a href="#">Wedding Wear</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Secondary Navigation (Icons) -->
+            <div class="header-icons">
+                <!-- Search Icon -->
+                <button class="icon-btn" id="searchBtn" aria-label="Search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M10.364 3a7.364 7.364 0 1 0 0 14.727 7.364 7.364 0 0 0 0-14.727Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M15.857 15.858 21 21.001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+
+                <!-- Wishlist Icon -->
+                <a href="#" class="icon-btn" aria-label="Wishlist">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </a>
+
+                <!-- Account Icon -->
+                <a href="#" class="icon-btn" aria-label="Account">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M16.125 8.75c-.184 2.478-2.063 4.5-4.125 4.5s-3.944-2.021-4.125-4.5c-.187-2.578 1.64-4.5 4.125-4.5 2.484 0 4.313 1.969 4.125 4.5Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M3.017 20.747C3.783 16.5 7.922 14.25 12 14.25s8.217 2.25 8.984 6.497" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </a>
+
+                <!-- Cart Icon -->
+                <a href="#" class="icon-btn cart-icon" aria-label="Cart">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Search Bar (Hidden by default) -->
+        <div class="search-overlay" id="searchOverlay">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search for sarees, collections...">
+                <button class="search-close" id="searchClose">
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                        <path d="m1 1 14 14M1 15 15 1" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Sidebar -->
+        <div class="mobile-sidebar" id="mobileSidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+                <button class="sidebar-close" id="sidebarClose">
+                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                        <path d="m1 1 14 14M1 15 15 1" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Best Selling Sarees</a></li>
+                    <li><a href="#">Latest Sarees Collection</a></li>
+                    <li><a href="#">Wedding Picks</a></li>
+                    <li><a href="#">Account</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Manovastra. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

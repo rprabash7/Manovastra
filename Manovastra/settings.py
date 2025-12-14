@@ -24,7 +24,13 @@ SECRET_KEY = 'django-insecure-le6k3j1eqb!egll$xgqwu*r&3swh@%(z2%&u@v3g7=#2*m^)9r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '13.232.28.7',           # EC2 IP ⭐ ADD THIS
+    'manovastra.net',        # Domain
+    'www.manovastra.net',    # www
+    'localhost', '127.0.0.1' # Local
+]
+
 
 # Application definition
 
