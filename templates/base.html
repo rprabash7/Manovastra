@@ -4,27 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Manovastra - Premium Sarees{% endblock %}</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <!-- Header Navigation -->
+    <!-- Header -->
     <header class="header">
         <div class="container">
-            <!-- Mobile Menu Toggle -->
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M1 19h22M1 12h22M1 5h22" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
             </button>
 
-            <!-- Logo -->
             <div class="header-logo">
                 <a href="/">
-                    <img src="/static/Images/Manovastra.png" alt="Manovastra Logo">
+                    <img src="{% static 'Images/Manovastra.png' %}" alt="Manovastra Logo">
                 </a>
             </div>
 
-            <!-- Primary Navigation (Desktop) -->
             <nav class="header-nav">
                 <ul class="nav-list">
                     <li class="nav-item dropdown">
@@ -54,9 +52,7 @@
                 </ul>
             </nav>
 
-            <!-- Secondary Navigation (Icons) -->
             <div class="header-icons">
-                <!-- Search Icon -->
                 <button class="icon-btn" id="searchBtn" aria-label="Search">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M10.364 3a7.364 7.364 0 1 0 0 14.727 7.364 7.364 0 0 0 0-14.727Z" stroke="currentColor" stroke-width="1.5"/>
@@ -64,14 +60,12 @@
                     </svg>
                 </button>
 
-                <!-- Wishlist Icon -->
                 <a href="#" class="icon-btn" aria-label="Wishlist">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
                     </svg>
                 </a>
 
-                <!-- Account Icon -->
                 <a href="#" class="icon-btn" aria-label="Account">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M16.125 8.75c-.184 2.478-2.063 4.5-4.125 4.5s-3.944-2.021-4.125-4.5c-.187-2.578 1.64-4.5 4.125-4.5 2.484 0 4.313 1.969 4.125 4.5Z" stroke="currentColor" stroke-width="1.5"/>
@@ -79,7 +73,6 @@
                     </svg>
                 </a>
 
-                <!-- Cart Icon -->
                 <a href="#" class="icon-btn cart-icon" aria-label="Cart">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
@@ -89,7 +82,6 @@
             </div>
         </div>
 
-        <!-- Search Bar (Hidden by default) -->
         <div class="search-overlay" id="searchOverlay">
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="Search for sarees, collections...">
@@ -101,7 +93,6 @@
             </div>
         </div>
 
-        <!-- Mobile Menu Sidebar -->
         <div class="mobile-sidebar" id="mobileSidebar">
             <div class="sidebar-header">
                 <h3>Menu</h3>
@@ -124,6 +115,57 @@
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
     </header>
 
+    <!-- Slideshow -->
+    {% if slides %}
+    <section class="slideshow-section">
+        <div class="slideshow-carousel" id="slideshow">
+            <div class="slideshow-wrapper">
+                {% for slide in slides %}
+                <div class="slideshow-slide {% if forloop.first %}active{% endif %}">
+                    <a href="{{ slide.link_url|default:'#' }}" class="slide-link">
+                        <picture>
+                            {% if slide.image_mobile %}
+                            <source media="(max-width: 768px)" srcset="{{ slide.image_mobile.url }}">
+                            {% endif %}
+                            <img src="{{ slide.image_desktop.url }}" 
+                                 alt="{{ slide.title }}" 
+                                 class="slide-image"
+                                 loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+                        </picture>
+                        
+                        {% if slide.title or slide.description %}
+                        <div class="slide-content">
+                            {% if slide.title %}<h2 class="slide-title">{{ slide.title }}</h2>{% endif %}
+                            {% if slide.description %}<p class="slide-description">{{ slide.description }}</p>{% endif %}
+                        </div>
+                        {% endif %}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="slideshow-dots">
+                {% for slide in slides %}
+                <button class="dot {% if forloop.first %}active{% endif %}" 
+                        onclick="goToSlide({{ forloop.counter0 }})"
+                        aria-label="Go to slide {{ forloop.counter }}"></button>
+                {% endfor %}
+            </div>
+
+            <button class="slide-arrow slide-arrow-prev" onclick="changeSlide(-1)" aria-label="Previous">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <button class="slide-arrow slide-arrow-next" onclick="changeSlide(1)" aria-label="Next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+    </section>
+    {% endif %}
+
     <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
@@ -136,6 +178,7 @@
         </div>
     </footer>
 
-    <script src="/static/js/main.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/slideshow.js' %}"></script>
 </body>
 </html>
