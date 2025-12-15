@@ -166,6 +166,37 @@
     </section>
     {% endif %}
 
+{% if occasions %}
+<section class="occasion-section">
+    <div class="container">
+        <!-- Heading -->
+        <div class="occasion-heading">
+            <img src="{% static 'images/decorative-top.png' %}" alt="" class="heading-decoration">
+            <h2 class="section-title">Shop By Occasion</h2>
+            <img src="{% static 'images/decorative-bottom.png' %}" alt="" class="heading-decoration">
+        </div>
+
+        <!-- Occasion Grid -->
+        <div class="occasion-grid">
+            {% for occasion in occasions %}
+            <a href="{{ occasion.get_absolute_url }}" class="occasion-card">
+                <div class="occasion-image-wrapper">
+                    <img src="{{ occasion.image.url }}" 
+                         alt="{{ occasion.name }}" 
+                         class="occasion-image"
+                         loading="lazy">
+                    <div class="occasion-overlay">
+                        <h3 class="occasion-name">{{ occasion.name }}</h3>
+                        <button class="explore-btn">Explore Collection</button>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
     <!-- Main Content -->
     <main>
         {% block content %}{% endblock %}
