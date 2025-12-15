@@ -172,7 +172,7 @@
         <!-- Heading -->
         <div class="occasion-heading">
             <img src="{% static 'images/decorative-top.png' %}" alt="" class="heading-decoration">
-            <h2 class="section-title">Shop By Occasion</h2>
+            <h2 class="section-title">Explore Collections</h2>
             <img src="{% static 'images/decorative-bottom.png' %}" alt="" class="heading-decoration">
         </div>
 
@@ -187,11 +187,114 @@
                          loading="lazy">
                     <div class="occasion-overlay">
                         <h3 class="occasion-name">{{ occasion.name }}</h3>
-                        <button class="explore-btn">Explore Collection</button>
+                        <button class="explore-btn">Buy now</button>
                     </div>
                 </div>
             </a>
             {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Our Bestsellers Section -->
+{% if bestsellers %}
+<section class="bestsellers-section">
+    <div class="container">
+        <!-- Heading -->
+        <div class="section-heading">
+            <img src="{% static 'images/decorative-top.png' %}" alt="" class="heading-decoration">
+            <h2 class="section-title">Our Bestsellers</h2>
+            <img src="{% static 'images/decorative-bottom.png' %}" alt="" class="heading-decoration">
+        </div>
+
+        <!-- Product Grid Carousel -->
+        <div class="bestsellers-carousel">
+            <button class="carousel-nav carousel-nav-prev" id="bestsellersPrev" aria-label="Previous">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+
+            <div class="bestsellers-grid" id="bestsellersGrid">
+                {% for product in bestsellers %}
+                <div class="product-card">
+                    <!-- Badge -->
+                    {% if product.discount_percentage > 0 %}
+                    <div class="product-badge">
+                        Save ₹{{ product.savings|floatformat:0 }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Image -->
+                    <a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
+                        <img src="{{ product.image.url }}" 
+                             alt="{{ product.name }}" 
+                             class="product-image product-image-primary"
+                             loading="lazy">
+                        {% if product.image_hover %}
+                        <img src="{{ product.image_hover.url }}" 
+                             alt="{{ product.name }}" 
+                             class="product-image product-image-hover"
+                             loading="lazy">
+                        {% endif %}
+                    </a>
+
+                    <!-- Product Info -->
+                    <div class="product-info">
+                        <a href="{{ product.get_absolute_url }}" class="product-name">
+                            {{ product.name }}
+                        </a>
+
+                        <!-- Price -->
+                        <div class="product-price">
+                            <span class="price-sale">₹{{ product.sale_price|floatformat:0 }}</span>
+                            {% if product.original_price > product.sale_price %}
+                            <span class="price-original">₹{{ product.original_price|floatformat:0 }}</span>
+                            <span class="price-discount">{{ product.discount_percentage }}% Off</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Rating -->
+                        <div class="product-rating">
+                            <div class="rating-stars">
+                                {% for i in "12345" %}
+                                    {% if product.rating >= forloop.counter %}
+                                    <svg class="star star-filled" width="14" height="14" viewBox="0 0 12 11">
+                                        <path d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z" fill="#d32f2f"/>
+                                    </svg>
+                                    {% else %}
+                                    <svg class="star star-empty" width="14" height="14" viewBox="0 0 12 11">
+                                        <path d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z" fill-opacity="0.3" fill="#666"/>
+                                    </svg>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span class="rating-text">({{ product.rating|floatformat:1 }})</span>
+                        </div>
+
+                        <!-- Add to Cart -->
+                        <button class="product-add-cart" data-product-id="{{ product.id }}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                            <span>Add to Cart</span>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button class="carousel-nav carousel-nav-next" id="bestsellersNext" aria-label="Next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- View All Button -->
+        <div class="section-footer">
+            <a href="/products/" class="view-all-btn">View All Products</a>
         </div>
     </div>
 </section>
