@@ -179,7 +179,7 @@
         <!-- Occasion Grid -->
         <div class="occasion-grid">
             {% for occasion in occasions %}
-            <a href="{{ occasion.get_absolute_url }}" class="occasion-card">
+            <a href="{% url 'category_products' occasion.slug %}" class="occasion-card">
                 <div class="occasion-image-wrapper">
                     <img src="{{ occasion.image.url }}" 
                          alt="{{ occasion.name }}" 
@@ -273,13 +273,7 @@
                             <span class="rating-text">({{ product.rating|floatformat:1 }})</span>
                         </div>
 
-                        <!-- Add to Cart -->
-                        <button class="product-add-cart" data-product-id="{{ product.id }}">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
-                            <span>Add to Cart</span>
-                        </button>
+                        
                     </div>
                 </div>
                 {% endfor %}
@@ -376,13 +370,6 @@
                             <span class="rating-text">({{ product.rating|floatformat:1 }})</span>
                         </div>
 
-                        <!-- Add to Cart -->
-                        <button class="product-add-cart" data-product-id="{{ product.id }}">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
-                            <span>Add to Cart</span>
-                        </button>
                     </div>
                 </div>
                 {% endfor %}
@@ -486,13 +473,6 @@
                             <span class="rating-text">({{ product.rating|floatformat:1 }})</span>
                         </div>
 
-                        <!-- Add to Cart -->
-                        <button class="product-add-cart" data-product-id="{{ product.id }}">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
-                            <span>Add to Cart</span>
-                        </button>
                     </div>
                 </div>
                 {% endfor %}
@@ -687,4 +667,4 @@
     <script src="{% static 'js/slideshow.js' %}"></script>
     <script src="{% static 'js/bestsellers.js' %}"></script>
 </body>
-</html>
+</html>]

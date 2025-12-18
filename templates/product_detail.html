@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - Manovastra</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Product Detail Specific Styles */
+        .product-detail-section {
+            padding: 3rem 0;
+            background: #fff;
+        }
+        
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        /* Product Image Section */
+        .product-detail-images {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        
+        .main-product-image {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 1px solid #eee;
+        }
+        
+        .main-product-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .main-product-image img:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Product Info Section */
+        .product-detail-info {
+            padding: 1rem 0;
+        }
+        
+        .product-detail-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1c1c1c;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        
+        .product-detail-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-detail-price {
+            margin-bottom: 2rem;
+        }
+        
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .current-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+        
+        .original-price {
+            font-size: 1.5rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+        
+        .discount-badge {
+            background: #d32f2f;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .savings-text {
+            color: #2e7d32;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Product Details */
+        .product-details {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .product-details h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #1c1c1c;
+        }
+        
+        .product-details p {
+            line-height: 1.8;
+            color: #555;
+            font-size: 1rem;
+        }
+        
+        .product-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .info-value {
+            color: #1c1c1c;
+            font-size: 1rem;
+        }
+        
+        /* Action Buttons */
+        .product-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-cart {
+            background: #1c1c1c;
+            color: #fff;
+        }
+        
+        .btn-cart:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-buy {
+            background: #d32f2f;
+            color: #fff;
+        }
+        
+        .btn-buy:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(211,47,47,0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .product-actions {
+                flex-direction: column;
+            }
+            
+            .product-detail-title {
+                font-size: 1.5rem;
+            }
+            
+            .current-price {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Stock Status */
+        .stock-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .in-stock {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .out-of-stock {
+            background: #ffebee;
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (same as base.html) -->
+    <header class="header">
+        <div class="container">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M1 19h22M1 12h22M1 5h22" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+            </button>
+
+            <div class="header-logo">
+                <a href="/">
+                    <img src="{% static 'Images/Manovastra.png' %}" alt="Manovastra Logo">
+                </a>
+            </div>
+
+            <nav class="header-nav">
+                <ul class="nav-list">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Categories</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Sarees</a></li>
+                            <li><a href="#">Kurta Set</a></li>
+                            <li><a href="#">Kurtis</a></li>
+                            <li><a href="#">Gowns</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Best Selling Sarees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Latest Sarees Collection</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-icons">
+                <button class="icon-btn" id="searchBtn" aria-label="Search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M10.364 3a7.364 7.364 0 1 0 0 14.727 7.364 7.364 0 0 0 0-14.727Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M15.857 15.858 21 21.001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+
+                <a href="#" class="icon-btn" aria-label="Wishlist">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </a>
+
+                <a href="#" class="icon-btn cart-icon" aria-label="Cart">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <span class="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+            <!-- Product Images -->
+            <div class="product-detail-images">
+                <div class="main-product-image">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-detail-info">
+                <h1 class="product-detail-title">{{ product.name }}</h1>
+
+                <!-- Rating -->
+                <div class="product-detail-rating">
+                    <div class="rating-stars">
+                        {% for i in "12345" %}
+                            {% if product.rating >= forloop.counter %}
+                            <svg class="star star-filled" width="20" height="20" viewBox="0 0 12 11">
+                                <path d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z" fill="#d32f2f"/>
+                            </svg>
+                            {% else %}
+                            <svg class="star star-empty" width="20" height="20" viewBox="0 0 12 11">
+                                <path d="M6 0v8.635L2.292 11 3.48 6.87 0 4.202l4.443-.187L6 0Zm0 0v8.635L9.708 11 8.52 6.87 12 4.202l-4.443-.187L6 0Z" fill-opacity="0.3" fill="#666"/>
+                            </svg>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="rating-text">({{ product.rating|floatformat:1 }}/5.0 - {{ product.review_count }} reviews)</span>
+                </div>
+
+                <!-- Stock Status -->
+                {% if product.in_stock %}
+                <div class="stock-status in-stock">✓ In Stock</div>
+                {% else %}
+                <div class="stock-status out-of-stock">✗ Out of Stock</div>
+                {% endif %}
+
+                <!-- Price -->
+                <div class="product-detail-price">
+                    <div class="price-container">
+                        <span class="current-price">₹{{ product.sale_price|floatformat:0 }}</span>
+                        {% if product.original_price > product.sale_price %}
+                        <span class="original-price">₹{{ product.original_price|floatformat:0 }}</span>
+                        <span class="discount-badge">{{ product.discount_percentage }}% OFF</span>
+                        {% endif %}
+                    </div>
+                    {% if product.savings > 0 %}
+                    <p class="savings-text">You Save: ₹{{ product.savings|floatformat:0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Product Details -->
+                <div class="product-details">
+                    <h3>Product Details</h3>
+                    {% if product.description %}
+                    <p>{{ product.description }}</p>
+                    {% else %}
+                    <p>Premium quality {{ product.name }} perfect for any occasion. Crafted with attention to detail and designed for comfort and style.</p>
+                    {% endif %}
+
+                    <div class="product-info-grid">
+                        {% if product.fabric %}
+                        <div class="info-item">
+                            <span class="info-label">Fabric</span>
+                            <span class="info-value">{{ product.fabric }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if product.color %}
+                        <div class="info-item">
+                            <span class="info-label">Color</span>
+                            <span class="info-value">{{ product.color }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="info-item">
+                            <span class="info-label">Category</span>
+                            <span class="info-value">{{ product.get_category_display }}</span>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-label">Stock</span>
+                            <span class="info-value">{{ product.stock_quantity }} units</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="product-actions">
+                    <button class="btn btn-cart" onclick="addToCart('{{ product.id }}')">
+                        Add to Cart
+                    </button>
+                    <a href="{% url 'order_summary' product.slug %}" class="btn btn-buy">
+    Buy Now
+</a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Manovastra. All Rights Reserved. | Designed with ❤️ in India</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function addToCart(productId) {
+            alert('Product added to cart! (ID: ' + productId + ')');
+            // TODO: Implement actual cart functionality
+        }
+
+        function buyNow(productId) {
+            alert('Redirecting to checkout... (Product ID: ' + productId + ')');
+            // TODO: Implement checkout redirect
+        }
+    </script>
+</body>
+</html>
