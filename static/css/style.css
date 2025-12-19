@@ -1478,3 +1478,60 @@ main {
         height: 48px;
     }
 }
+
+/* ========================================
+   Website Protection CSS
+   ======================================== */
+
+/* Disable text selection */
+body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Allow selection in input fields */
+input, textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+/* Disable image dragging */
+img {
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
+    user-drag: none;
+    pointer-events: none;
+}
+
+/* Re-enable pointer events for clickable images */
+a img, button img {
+    pointer-events: auto;
+}
+
+/* Prevent highlighting */
+::selection {
+    background: transparent;
+}
+
+::-moz-selection {
+    background: transparent;
+}
+
+/* Watermark (Optional) */
+.page-watermark {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 100px;
+    color: rgba(211, 47, 47, 0.05);
+    pointer-events: none;
+    z-index: 9999;
+    user-select: none;
+    font-weight: bold;
+}

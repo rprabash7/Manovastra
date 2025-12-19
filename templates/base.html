@@ -6,7 +6,44 @@
     <title>{% block title %}Manovastra{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- ✅ Inline Protection -->
+    <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Disable keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+            if (e.keyCode === 123 || 
+                (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+                (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+                (e.ctrlKey && e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        // Disable text selection
+        document.addEventListener('selectstart', e => e.preventDefault());
+        
+        // Disable copy
+        document.addEventListener('copy', e => e.preventDefault());
+    </script>
+    
+    <style>
+        body { 
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            user-select: none; 
+        }
+        input, textarea { 
+            -webkit-user-select: text; 
+            user-select: text; 
+        }
+    </style>
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -681,5 +718,9 @@
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/slideshow.js' %}"></script>
     <script src="{% static 'js/bestsellers.js' %}"></script>
+
+    <!-- ✅ Website Protection Script -->
+    <script src="{% static 'js/protection.js' %}"></script>
+
 </body>
 </html>]
