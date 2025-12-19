@@ -31,7 +31,7 @@
         
         /* Product Image Section */
         .product-detail-images {
-            position: sticky;
+          /*  position: sticky; */
             top: 100px;
             height: fit-content;
         }
@@ -203,7 +203,9 @@
         }
         
         @media (max-width: 768px) {
-            
+            .product-actions {
+                flex-direction: column;
+            }
             
             .product-detail-title {
                 font-size: 1.5rem;
@@ -389,8 +391,8 @@
                         Add to Cart
                     </button>
                     <a href="{% url 'order_summary' product.slug %}" class="btn btn-buy">
-    Buy Now
-</a>
+                        Buy Now
+                    </a>
 
                 </div>
             </div>
