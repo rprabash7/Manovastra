@@ -1386,3 +1386,95 @@ main {
         height: 45px;
     }
 }
+
+/* Admin Button Styling */
+.admin-btn {
+    position: relative;
+}
+
+.admin-btn:hover {
+    color: #d32f2f !important;
+    transform: scale(1.1);
+}
+
+/* Admin badge (optional - shows "Admin" on hover) */
+.admin-btn::after {
+    content: 'Admin';
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #d32f2f;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.admin-btn:hover::after {
+    opacity: 1;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .admin-btn {
+        display: inline-flex;
+    }
+}
+
+
+/* Floating Admin Button */
+.floating-admin-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #d32f2f, #b71c1c);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4);
+    z-index: 999;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.floating-admin-btn:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(211, 47, 47, 0.6);
+}
+
+.floating-admin-btn svg {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .floating-admin-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .floating-admin-btn svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Hide on very small screens if needed */
+@media (max-width: 480px) {
+    .floating-admin-btn {
+        bottom: 15px;
+        right: 15px;
+        width: 48px;
+        height: 48px;
+    }
+}
