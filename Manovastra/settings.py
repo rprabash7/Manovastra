@@ -251,5 +251,5 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Razorpay Configuration
-RAZORPAY_KEY_ID = 'rzp_test_RtDPZkaBGo59WF'  # Your Key ID
-RAZORPAY_KEY_SECRET = '8xEkfQ1oDKw33EgEhRDKNYLa'  # Your Key Secret
+RAZORPAY_KEY_ID = 'rzp_live_RtSASdhJepRseC'  # Your Key ID
+RAZORPAY_KEY_SECRET = 'XIfI8PMaoMRAbQ6Jo4mNKiR2'  # Your Key Secret
