@@ -42,6 +42,59 @@
             user-select: text; 
         }
     </style>
+
+    <!-- ✅ Favicon Links (Add These) -->
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+    <link rel="icon" type="image/png" sizes="512x512" href="{% static 'favicon/android-chrome-512x512.png' %}">
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+
+    <!-- ✅ SEO Meta Tags for Google -->
+    <meta name="description" content="Manovastra - Your destination for premium quality sarees and ethnic wear. Shop bestsellers, wedding collection, and festive wear online.">
+    <meta name="keywords" content="sarees, ethnic wear, wedding sarees, designer sarees, silk sarees, online saree shopping">
+    <meta name="author" content="Manovastra">
+
+    <!-- ✅ Open Graph (for social media sharing) -->
+    <meta property="og:title" content="Manovastra - Premium Sarees & Ethnic Wear">
+    <meta property="og:description" content="Your destination for premium quality sarees and ethnic wear">
+    <meta property="og:image" content="{% static 'Images/Manovastra.png' %}">
+    <meta property="og:url" content="https://www.manovastra.net">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Manovastra - Premium Sarees">
+    <meta name="twitter:description" content="Your destination for premium quality sarees and ethnic wear">
+    <meta name="twitter:image" content="{% static 'Images/Manovastra.png' %}">
+
+        <!-- ✅ Schema.org Markup for Google -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ClothingStore",
+        "name": "Manovastra",
+        "description": "Your destination for premium quality sarees and ethnic wear",
+        "url": "https://www.manovastra.net",
+        "logo": "https://www.manovastra.net{% static 'Images/Manovastra.png' %}",
+        "image": "https://www.manovastra.net{% static 'Images/Manovastra.png' %}",
+        "telephone": "+91-XXXXXXXXXX",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Bengaluru",
+            "addressRegion": "Karnataka",
+            "addressCountry": "IN"
+        },
+        "sameAs": [
+            "https://www.facebook.com/manovastra",
+            "https://www.instagram.com/manovastra",
+            "https://www.linkedin.com/company/manovastra"
+        ]
+    }
+    </script>
+    
+</head>
+
+
 </head>
 
 <body>
