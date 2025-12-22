@@ -167,18 +167,27 @@
                     {% endif %}
 
                     <!-- Image -->
-                    <a href="{% url 'product_detail' product.slug %}" class="product-image-wrapper">
-                        <img src="{{ product.image.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-primary"
-                             loading="lazy">
-                        {% if product.image_hover %}
-                        <img src="{{ product.image_hover.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-hover"
-                             loading="lazy">
-                        {% endif %}
-                    </a>
+<a href="{% url 'product_detail' product.slug %}" class="product-image-wrapper">
+    {% if product.image %}
+        <img src="{{ product.image.url }}" 
+             alt="{{ product.name }}" 
+             class="product-image product-image-primary"
+             loading="lazy">
+        {% if product.image_hover %}
+        <img src="{{ product.image_hover.url }}" 
+             alt="{{ product.name }}" 
+             class="product-image product-image-hover"
+             loading="lazy">
+        {% endif %}
+    {% else %}
+        <!-- Placeholder image -->
+        <img src="https://via.placeholder.com/400x500?text={{ product.name|slice:':10' }}" 
+             alt="{{ product.name }}" 
+             class="product-image product-image-primary"
+             loading="lazy">
+    {% endif %}
+</a>
+
 
                     <!-- Product Info -->
                     <div class="product-info">

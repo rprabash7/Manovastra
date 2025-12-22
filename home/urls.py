@@ -6,7 +6,7 @@ urlpatterns = [
     path('subscribe/', views.subscribe_newsletter, name='subscribe_newsletter'),
     path('products/<slug:slug>/', views.product_detail, name='product_detail'), 
     path('category/<slug:category_slug>/', views.category_products, name='category_products'),
-    path('order/<slug:slug>/', views.order_summary, name='order_summary'),\
+    path('order/<slug:slug>/', views.order_summary, name='order_summary'),
     
     # ✅ Payment URLs
     path('create-order/', views.create_order, name='create_order'),

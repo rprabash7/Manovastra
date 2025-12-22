@@ -21,61 +21,81 @@ class Slide(models.Model):
         return f"Slide {self.order} - {self.title or 'No Title'}"
 
 
-class Occasion(models.Model):
-    name = models.CharField(max_length=100, help_text="Ex: Gifting, Daily Wear")
-    slug = models.SlugField(unique=True, help_text="URL-friendly name")
-    image = models.ImageField(upload_to='occasions')
+# ============================================
+# ✅ NEW FRESH MODELS START HERE
+# ============================================
+
+class Category(models.Model):
+    """Product Categories"""
+    name = models.CharField(max_length=100, help_text="Ex: Sarees, Gowns, Kurtis")
+    slug = models.SlugField(unique=True, help_text="URL-friendly (auto-generated)")
     description = models.TextField(blank=True)
+    image = models.ImageField(upload_to='categories/', blank=True, null=True)
     order = models.IntegerField(default=0, help_text="Display order")
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        ordering = ['order']
-        verbose_name = "Shop Occasion"
-        verbose_name_plural = "Shop Occasions"
+        ordering = ['order', 'name']
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
     
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class Product(models.Model):
-    CATEGORY_CHOICES = [
-        ('saree', 'Saree'),
-        ('gown', 'Gown'),
-        ('kurti', 'Kurti'),
-        ('kurta_set', 'Kurta Set'),
-        ('lehenga', 'Lehenga'),
-        ('other', 'Other'),
-    ]
+    """Products Model"""
+    # Basic Info
+    name = models.CharField(max_length=200, help_text="Product name")
+    slug = models.SlugField(unique=True, blank=True, help_text="URL-friendly (auto-generated)")
+    description = models.TextField(blank=True, help_text="Product description")
     
-    name = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True, blank=True)
-    description = models.TextField(blank=True)
+    # Category (ForeignKey to Category model)
+    category = models.ForeignKey(
+        Category, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='products',
+        help_text="Select category"
+    )
     
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='saree')
+    # Pricing
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, help_text="MRP")
+    sale_price = models.DecimalField(max_digits=10, decimal_places=2, default=0, help_text="Selling price")
     
-    is_bestseller = models.BooleanField(default=False, help_text="Show in Bestsellers section")
-    is_ready_to_wear = models.BooleanField(default=False, help_text="Show in Ready to Wear section")
-    is_wedding = models.BooleanField(default=False, help_text="Show in Wedding Collection section")
+    # Images
+    image = models.ImageField(upload_to='products/', blank=True, null=True, help_text="Main product image")
+    image_hover = models.ImageField(upload_to='products/hover/', blank=True, null=True, help_text="Hover image (optional)")
     
-    original_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    sale_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    # Details
+    fabric = models.CharField(max_length=100, blank=True, help_text="Ex: Silk, Cotton")
+    color = models.CharField(max_length=50, blank=True, help_text="Ex: Red, Blue")
     
-    image = models.ImageField(upload_to='products/')
-    image_hover = models.ImageField(upload_to='products/hover/', blank=True, null=True)
+    # Ratings
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=5.0, help_text="Out of 5")
+    review_count = models.IntegerField(default=0, help_text="Number of reviews")
     
-    fabric = models.CharField(max_length=100, blank=True)
-    color = models.CharField(max_length=50, blank=True)
-    rating = models.DecimalField(max_digits=2, decimal_places=1, default=5.0)
-    review_count = models.IntegerField(default=0)
+    # Special Flags
+    is_bestseller = models.BooleanField(default=False, help_text="Show in Bestsellers")
+    is_ready_to_wear = models.BooleanField(default=False, help_text="Ready to Wear collection")
+    is_wedding = models.BooleanField(default=False, help_text="Wedding collection")
+    is_featured = models.BooleanField(default=False, help_text="Featured on homepage")
     
-    is_active = models.BooleanField(default=True)
-    stock_quantity = models.IntegerField(default=0)
+    # Stock & Status
+    stock_quantity = models.IntegerField(default=0, help_text="Available quantity")
+    is_active = models.BooleanField(default=True, help_text="Visible on website")
     
-    # ✅ FIXED - Renamed from 'order' to 'display_order'
-    display_order = models.IntegerField(default=0, help_text="Display order")
+    # Ordering
+    display_order = models.IntegerField(default=0, help_text="Display priority")
     
+    # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -97,13 +117,20 @@ class Product(models.Model):
     
     @property
     def discount_percentage(self):
+        """Calculate discount percentage"""
         if self.original_price > self.sale_price:
             return int(((self.original_price - self.sale_price) / self.original_price) * 100)
         return 0
     
     @property
     def savings(self):
+        """Calculate savings amount"""
         return self.original_price - self.sale_price
+    
+    @property
+    def in_stock(self):
+        """Check if product is in stock"""
+        return self.stock_quantity > 0
 
 
 class Testimonial(models.Model):

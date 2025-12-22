@@ -302,8 +302,13 @@
             <!-- Product Images -->
             <div class="product-detail-images">
                 <div class="main-product-image">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                </div>
+    {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+    {% else %}
+        <img src="https://via.placeholder.com/600x800?text={{ product.name }}" alt="{{ product.name }}">
+    {% endif %}
+</div>
+
             </div>
 
             <!-- Product Info -->

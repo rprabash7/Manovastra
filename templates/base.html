@@ -43,6 +43,7 @@
         }
     </style>
 
+
     <!-- ✅ Favicon Links (Add These) -->
     <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
@@ -50,10 +51,12 @@
     <link rel="icon" type="image/png" sizes="512x512" href="{% static 'favicon/android-chrome-512x512.png' %}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
 
+
     <!-- ✅ SEO Meta Tags for Google -->
     <meta name="description" content="Manovastra - Your destination for premium quality sarees and ethnic wear. Shop bestsellers, wedding collection, and festive wear online.">
     <meta name="keywords" content="sarees, ethnic wear, wedding sarees, designer sarees, silk sarees, online saree shopping">
     <meta name="author" content="Manovastra">
+
 
     <!-- ✅ Open Graph (for social media sharing) -->
     <meta property="og:title" content="Manovastra - Premium Sarees & Ethnic Wear">
@@ -62,10 +65,12 @@
     <meta property="og:url" content="https://www.manovastra.net">
     <meta property="og:type" content="website">
 
+
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Manovastra - Premium Sarees">
     <meta name="twitter:description" content="Your destination for premium quality sarees and ethnic wear">
     <meta name="twitter:image" content="{% static 'Images/Manovastra.png' %}">
+
 
         <!-- ✅ Schema.org Markup for Google -->
     <script type="application/ld+json">
@@ -95,8 +100,6 @@
 </head>
 
 
-</head>
-
 <body>
     <!-- Header -->
     <header class="header">
@@ -107,40 +110,45 @@
                 </svg>
             </button>
 
+
             <div class="header-logo">
                 <a href="/">
                     <img src="{% static 'Images/Manovastra.png' %}" alt="Manovastra Logo">
                 </a>
             </div>
 
+
             <nav class="header-nav">
-                <ul class="nav-list">
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">Categories</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Sarees</a></li>
-                            <li><a href="#">Kurta Set</a></li>
-                            <li><a href="#">Kurtis</a></li>
-                            <li><a href="#">Gowns</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Best Selling Sarees</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">Latest Sarees Collection</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a href="#" class="nav-link">Wedding Picks</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Haldi Wear</a></li>
-                            <li><a href="#">Mehndi Wear</a></li>
-                            <li><a href="#">Sangeet Wear</a></li>
-                            <li><a href="#">Wedding Wear</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
+    <ul class="nav-list">
+        <li class="nav-item dropdown">
+            <a href="#" class="nav-link">Categories</a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'category_products' 'sarees' %}">Sarees</a></li>
+                <li><a href="{% url 'category_products' 'kurta-set' %}">Kurta Set</a></li>
+                <li><a href="{% url 'category_products' 'kurtis' %}">Kurtis</a></li>
+                <li><a href="{% url 'category_products' 'gowns' %}">Gowns</a></li>
+                <li><a href="{% url 'category_products' 'lehengas' %}">Lehengas</a></li>
+            </ul>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'category_products' 'bestsellers' %}" class="nav-link">Best Selling Sarees</a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'category_products' 'latest' %}" class="nav-link">Latest Sarees Collection</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a href="{% url 'category_products' 'wedding' %}" class="nav-link">Wedding Picks</a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'category_products' 'wedding' %}">All Wedding Collection</a></li>
+                <li><a href="{% url 'category_products' 'sarees' %}">Wedding Sarees</a></li>
+                <li><a href="{% url 'category_products' 'lehengas' %}">Bridal Lehengas</a></li>
+                <li><a href="{% url 'category_products' 'gowns' %}">Wedding Gowns</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+
 
             <div class="header-icons">
                 <button class="icon-btn" id="searchBtn" aria-label="Search">
@@ -150,11 +158,13 @@
                     </svg>
                 </button>
 
+
                 <a href="#" class="icon-btn" aria-label="Wishlist">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
                     </svg>
                 </a>
+
 
                 <a href="#" class="icon-btn" aria-label="Account">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -163,6 +173,7 @@
                     </svg>
                 </a>
 
+
                 <a href="#" class="icon-btn cart-icon" aria-label="Cart">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
@@ -170,25 +181,17 @@
                     <span class="cart-count">0</span>
                 </a>
 
+
                 <a href="/manovastra-secure-admin-2025/" class="icon-btn admin-btn" aria-label="Admin" title="Admin Panel">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor"/>
                     </svg>
                 </a>
 
+
             </div>
         </div>
 
-        <div class="search-overlay" id="searchOverlay">
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search for sarees, collections...">
-                <button class="search-close" id="searchClose">
-                    <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                        <path d="m1 1 14 14M1 15 15 1" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
 
         <div class="mobile-sidebar" id="mobileSidebar">
             <div class="sidebar-header">
@@ -199,18 +202,11 @@
                     </svg>
                 </button>
             </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Best Selling Sarees</a></li>
-                    <li><a href="#">Latest Sarees Collection</a></li>
-                    <li><a href="#">Wedding Picks</a></li>
-                    <li><a href="#">Account</a></li>
-                </ul>
-            </nav>
+            
         </div>
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
     </header>
+
 
     <!-- Slideshow -->
     {% if slides %}
@@ -241,6 +237,7 @@
                 {% endfor %}
             </div>
 
+
             <div class="slideshow-dots">
                 {% for slide in slides %}
                 <button class="dot {% if forloop.first %}active{% endif %}" 
@@ -248,6 +245,7 @@
                         aria-label="Go to slide {{ forloop.counter }}"></button>
                 {% endfor %}
             </div>
+
 
             <button class="slide-arrow slide-arrow-prev" onclick="changeSlide(-1)" aria-label="Previous">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -263,6 +261,7 @@
     </section>
     {% endif %}
 
+
 {% if occasions %}
 <section class="occasion-section">
     <div class="container">
@@ -273,15 +272,23 @@
             <img src="{% static 'images/decorative-bottom.png' %}" alt="" class="heading-decoration">
         </div>
 
+
         <!-- Occasion Grid -->
         <div class="occasion-grid">
             {% for occasion in occasions %}
             <a href="{% url 'category_products' occasion.slug %}" class="occasion-card">
                 <div class="occasion-image-wrapper">
+                    {% if occasion.image %}
                     <img src="{{ occasion.image.url }}" 
                          alt="{{ occasion.name }}" 
                          class="occasion-image"
                          loading="lazy">
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x300?text={{ occasion.name }}" 
+                         alt="{{ occasion.name }}" 
+                         class="occasion-image"
+                         loading="lazy">
+                    {% endif %}
                     <div class="occasion-overlay">
                         <h3 class="occasion-name">{{ occasion.name }}</h3>
                         <button class="explore-btn">Buy now</button>
@@ -294,6 +301,7 @@
 </section>
 {% endif %}
 
+
 <!-- Our Bestsellers Section -->
 {% if bestsellers %}
 <section class="bestsellers-section">
@@ -305,6 +313,7 @@
             <img src="{% static 'images/decorative-bottom.png' %}" alt="" class="heading-decoration">
         </div>
 
+
         <!-- Product Grid Carousel -->
         <div class="bestsellers-carousel">
             <button class="carousel-nav carousel-nav-prev" id="bestsellersPrev" aria-label="Previous">
@@ -312,6 +321,7 @@
                     <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
+
 
             <div class="bestsellers-grid" id="bestsellersGrid">
                 {% for product in bestsellers %}
@@ -323,8 +333,10 @@
                     </div>
                     {% endif %}
 
+
                     <!-- Image -->
                     <a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
+                        {% if product.image %}
                         <img src="{{ product.image.url }}" 
                              alt="{{ product.name }}" 
                              class="product-image product-image-primary"
@@ -335,13 +347,21 @@
                              class="product-image product-image-hover"
                              loading="lazy">
                         {% endif %}
+                        {% else %}
+                        <img src="https://via.placeholder.com/400x500?text=Product" 
+                             alt="{{ product.name }}" 
+                             class="product-image product-image-primary"
+                             loading="lazy">
+                        {% endif %}
                     </a>
+
 
                     <!-- Product Info -->
                     <div class="product-info">
                         <a href="{{ product.get_absolute_url }}" class="product-name">
                             {{ product.name }}
                         </a>
+
 
                         <!-- Price -->
                         <div class="product-price">
@@ -351,6 +371,7 @@
                             <span class="price-discount">{{ product.discount_percentage }}% Off</span>
                             {% endif %}
                         </div>
+
 
                         <!-- Rating -->
                         <div class="product-rating">
@@ -370,11 +391,13 @@
                             <span class="rating-text">({{ product.rating|floatformat:1 }})</span>
                         </div>
 
+
                         
                     </div>
                 </div>
                 {% endfor %}
             </div>
+
 
             <button class="carousel-nav carousel-nav-next" id="bestsellersNext" aria-label="Next">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -383,6 +406,7 @@
             </button>
         </div>
 
+
         <!-- View All Button -->
         <div class="section-footer">
             <a href="/products/" class="view-all-btn">View All Products</a>
@@ -390,6 +414,7 @@
     </div>
 </section>
 {% endif %}
+
 
 {% if ready_to_wear %}
 <section class="ready-to-wear-section">
@@ -402,6 +427,7 @@
             <p class="section-subtitle">Pre-Stitched & Ready to Drape Sarees</p>
         </div>
 
+
         <!-- Product Grid Carousel -->
         <div class="product-carousel">
             <button class="carousel-nav carousel-nav-prev" id="readyToWearPrev" aria-label="Previous">
@@ -409,6 +435,7 @@
                     <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
+
 
             <div class="product-grid" id="readyToWearGrid">
                 {% for product in ready_to_wear %}
@@ -420,8 +447,10 @@
                     </div>
                     {% endif %}
 
+
                     <!-- Image -->
                     <a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
+                        {% if product.image %}
                         <img src="{{ product.image.url }}" 
                              alt="{{ product.name }}" 
                              class="product-image product-image-primary"
@@ -432,13 +461,21 @@
                              class="product-image product-image-hover"
                              loading="lazy">
                         {% endif %}
+                        {% else %}
+                        <img src="https://via.placeholder.com/400x500?text=Product" 
+                             alt="{{ product.name }}" 
+                             class="product-image product-image-primary"
+                             loading="lazy">
+                        {% endif %}
                     </a>
+
 
                     <!-- Product Info -->
                     <div class="product-info">
                         <a href="{{ product.get_absolute_url }}" class="product-name">
                             {{ product.name }}
                         </a>
+
 
                         <!-- Price -->
                         <div class="product-price">
@@ -448,6 +485,7 @@
                             <span class="price-discount">{{ product.discount_percentage }}% Off</span>
                             {% endif %}
                         </div>
+
 
                         <!-- Rating -->
                         <div class="product-rating">
@@ -467,10 +505,12 @@
                             <span class="rating-text">({{ product.rating|floatformat:1 }})</span>
                         </div>
 
+
                     </div>
                 </div>
                 {% endfor %}
             </div>
+
 
             <button class="carousel-nav carousel-nav-next" id="readyToWearNext" aria-label="Next">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -479,6 +519,7 @@
             </button>
         </div>
 
+
         <!-- View All Button -->
         <div class="section-footer">
             <a href="/ready-to-wear/" class="view-all-btn">View All Ready to Wear</a>
@@ -486,6 +527,7 @@
     </div>
 </section>
 {% endif %}
+
 
 {% if wedding_products %}
 <section class="wedding-section">
@@ -498,6 +540,7 @@
             <p class="section-subtitle">Vivah - Premium Wedding Collection</p>
         </div>
 
+
         <!-- Product Carousel -->
         <div class="product-carousel">
             <button class="carousel-nav carousel-nav-prev" id="weddingPrev" aria-label="Previous">
@@ -505,6 +548,7 @@
                     <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
             </button>
+
 
             <div class="product-grid" id="weddingGrid">
                 {% for product in wedding_products %}
@@ -516,8 +560,10 @@
                     </div>
                     {% endif %}
 
+
                     <!-- Product Image -->
                     <a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
+                        {% if product.image %}
                         <img src="{{ product.image.url }}" 
                              alt="{{ product.name }}" 
                              class="product-image product-image-primary"
@@ -526,6 +572,12 @@
                         <img src="{{ product.image_hover.url }}" 
                              alt="{{ product.name }}" 
                              class="product-image product-image-hover"
+                             loading="lazy">
+                        {% endif %}
+                        {% else %}
+                        <img src="https://via.placeholder.com/400x500?text=Product" 
+                             alt="{{ product.name }}" 
+                             class="product-image product-image-primary"
                              loading="lazy">
                         {% endif %}
                         
@@ -537,11 +589,13 @@
                         </div>
                     </a>
 
+
                     <!-- Product Info -->
                     <div class="product-info">
                         <a href="{{ product.get_absolute_url }}" class="product-name">
                             {{ product.name }}
                         </a>
+
 
                         <!-- Price -->
                         <div class="product-price">
@@ -551,6 +605,7 @@
                             <span class="price-discount">{{ product.discount_percentage }}% Off</span>
                             {% endif %}
                         </div>
+
 
                         <!-- Rating -->
                         <div class="product-rating">
@@ -570,10 +625,12 @@
                             <span class="rating-text">({{ product.rating|floatformat:1 }})</span>
                         </div>
 
+
                     </div>
                 </div>
                 {% endfor %}
             </div>
+
 
             <button class="carousel-nav carousel-nav-next" id="weddingNext" aria-label="Next">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -582,6 +639,7 @@
             </button>
         </div>
 
+
         <!-- View All Button -->
         <div class="section-footer">
             <a href="/wedding-collection/" class="view-all-btn">View All Favorites</a>
@@ -589,6 +647,7 @@
     </div>
 </section>
 {% endif %}
+
 
 {% if testimonials %}
 <section class="testimonials-section">
@@ -601,6 +660,7 @@
             <p class="section-subtitle">What Our Customers Say</p>
         </div>
 
+
         <!-- Testimonials Grid -->
         <div class="testimonials-grid">
             {% for testimonial in testimonials %}
@@ -611,6 +671,7 @@
                         <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" fill="#d32f2f" opacity="0.3"/>
                     </svg>
                 </div>
+
 
                 <!-- Customer Image (if available) -->
                 {% if testimonial.customer_image %}
@@ -626,6 +687,7 @@
                 </div>
                 {% endif %}
 
+
                 <!-- Customer Info -->
                 <div class="customer-info">
                     <h3 class="customer-name">{{ testimonial.customer_name }}</h3>
@@ -634,8 +696,10 @@
                     {% endif %}
                 </div>
 
+
                 <!-- Review Text -->
                 <p class="review-text">{{ testimonial.review_text }}</p>
+
 
                 <!-- Rating Stars -->
                 <div class="rating-stars">
@@ -652,6 +716,7 @@
                     {% endfor %}
                 </div>
 
+
                 <!-- Product Info (optional) -->
                 {% if testimonial.purchase_product %}
                 <p class="purchase-info">Purchased: {{ testimonial.purchase_product }}</p>
@@ -662,6 +727,7 @@
     </div>
 </section>
 {% endif %}
+
 
 <footer class="footer">
     <div class="container">
@@ -678,6 +744,7 @@
                     </div>
                 </div>
 
+
                 <!-- Important Links -->
                 <div class="footer-block footer-links">
                     <h3 class="footer-title">Important Links</h3>
@@ -693,6 +760,7 @@
                     </ul>
                 </div>
 
+
                 <!-- Useful Links -->
                 <div class="footer-block footer-links">
                     <h3 class="footer-title">Useful Links</h3>
@@ -707,6 +775,7 @@
                         <li><a href="/contact/">Contact Us</a></li>
                     </ul>
                 </div>
+
 
                 <!-- Newsletter -->
                 <div class="footer-block footer-newsletter">
@@ -727,6 +796,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Social Media -->
             <div class="footer-social">
@@ -752,12 +822,14 @@
                 </a>
             </div>
 
+
             <!-- Copyright -->
             <div class="footer-bottom">
                 <p>&copy; 2025 Manovastra. All Rights Reserved. | Designed with ❤️ in India</p>
             </div>
         </div>
     </div>
+
 
     <!-- Floating Admin Button -->
     <a href="/manovastra-secure-admin-2025/" class="floating-admin-btn" title="Admin Panel" aria-label="Admin Panel">
@@ -766,16 +838,21 @@
         </svg>
     </a>
 
+
 </footer>
+
 
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/slideshow.js' %}"></script>
     <script src="{% static 'js/bestsellers.js' %}"></script>
 
+
     <!-- ✅ Website Protection Script -->
     <script src="{% static 'js/protection.js' %}"></script>
 
+
     <script src="{% static 'js/protection.min.js' %}"></script>
 
+
 </body>
-</html>]
+</html>

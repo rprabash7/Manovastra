@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from .models import Slide, Occasion, Product, Testimonial, Order
+from .models import Slide, Category, Product, Testimonial, Order
 
 
 # Banner Slides Admin
@@ -23,55 +23,51 @@ class SlideAdmin(admin.ModelAdmin):
     image_preview.short_description = "Preview"
 
 
-# Shop Occasions Admin
-@admin.register(Occasion)
-class OccasionAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'image_preview', 'order', 'is_active', 'created_at']
+# Category Admin
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'slug', 'image_preview', 'product_count', 'order', 'is_active', 'created_at']
     list_editable = ['order', 'is_active']
     list_filter = ['is_active', 'created_at']
     search_fields = ['name', 'slug', 'description']
     prepopulated_fields = {'slug': ('name',)}
-    ordering = ['order']
+    ordering = ['order', 'name']
     
     def image_preview(self, obj):
         if obj.image:
-            return format_html(
-                '<img src="{}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;" />',
-                obj.image.url
-            )
+            return format_html('<img src="{}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />', obj.image.url)
         return "No Image"
-    image_preview.short_description = "Preview"
+    image_preview.short_description = "Image"
+    
+    def product_count(self, obj):
+        return obj.products.filter(is_active=True).count()
+    product_count.short_description = "Products"
 
 
-# Products Admin
+# Product Admin
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = [
         'image_preview',
-        'name',  # ✅ This will be clickable by default
-        'category', 
+        'name',
+        'category',
         'original_price',
-        'sale_price', 
-        'stock_quantity', 
-        'is_bestseller', 
-        'is_active', 
+        'sale_price',
+        'stock_quantity',
+        'is_bestseller',
+        'is_active',
         'created_at'
     ]
-    
-    # ✅ list_editable lo 'name' undadhu - adi clickable link ga undali
     list_editable = ['sale_price', 'stock_quantity', 'is_bestseller', 'is_active']
-    
     list_filter = ['category', 'is_bestseller', 'is_ready_to_wear', 'is_wedding', 'is_active', 'created_at']
     search_fields = ['name', 'description', 'fabric', 'color', 'slug']
     prepopulated_fields = {'slug': ('name',)}
     ordering = ['-created_at']
-    
-    # ✅ Add list_display_links to make name and image clickable
     list_display_links = ['image_preview', 'name']
     
     fieldsets = (
         ('Basic Information', {
-            'fields': ('name', 'slug', 'description', 'category')
+            'fields': ('name', 'slug', 'category', 'description')
         }),
         ('Pricing', {
             'fields': ('original_price', 'sale_price')
@@ -82,20 +78,17 @@ class ProductAdmin(admin.ModelAdmin):
         ('Product Details', {
             'fields': ('fabric', 'color', 'rating', 'review_count')
         }),
-        ('Display Settings', {
-            'fields': ('is_bestseller', 'is_ready_to_wear', 'is_wedding', 'is_active', 'display_order')
+        ('Special Collections', {
+            'fields': ('is_bestseller', 'is_ready_to_wear', 'is_wedding', 'is_featured')
         }),
-        ('Inventory', {
-            'fields': ('stock_quantity',)
+        ('Stock & Display', {
+            'fields': ('stock_quantity', 'is_active', 'display_order')
         }),
     )
     
     def image_preview(self, obj):
         if obj.image:
-            return format_html(
-                '<img src="{}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px; cursor: pointer;" />',
-                obj.image.url
-            )
+            return format_html('<img src="{}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />', obj.image.url)
         return "No Image"
     image_preview.short_description = "Image"
 

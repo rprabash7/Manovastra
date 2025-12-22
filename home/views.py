@@ -8,7 +8,7 @@ from django.conf import settings
 import razorpay
 import json
 
-from .models import Slide, Occasion, Product, Testimonial
+from .models import Slide, Category, Product, Testimonial
 
 
 # Initialize Razorpay client
@@ -18,7 +18,7 @@ razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZOR
 def welcome(request):
     """Homepage view"""
     slides = Slide.objects.filter(is_active=True)[:5]
-    occasions = Occasion.objects.filter(is_active=True)[:4]
+    occasions = Category.objects.filter(is_active=True)[:4]
     bestsellers = Product.objects.filter(is_bestseller=True, is_active=True)[:8]
     ready_to_wear = Product.objects.filter(is_ready_to_wear=True, is_active=True)[:8]
     wedding_products = Product.objects.filter(is_wedding=True, is_active=True)[:8]
@@ -44,28 +44,42 @@ def product_detail(request, slug):
 
 
 def category_products(request, category_slug):
-    """Display products filtered by category/occasion"""
+    """Display products filtered by category"""
     
-    category_map = {
-        'sarees': {'name': 'Sarees Collection', 'filter': {'category': 'saree'}},
-        'kurta-set': {'name': 'Kurta Sets', 'filter': {'category': 'kurta_set'}},
-        'kurtis': {'name': 'Kurtis Collection', 'filter': {'category': 'kurti'}},
-        'gowns': {'name': 'Gowns Collection', 'filter': {'category': 'gown'}},
-        'bestsellers': {'name': 'Best Sellers', 'filter': {'is_bestseller': True}},
-        'ready-to-wear': {'name': 'Ready to Wear', 'filter': {'is_ready_to_wear': True}},
-        'wedding': {'name': 'Wedding Collection', 'filter': {'is_wedding': True}},
-        'latest': {'name': 'Latest Collection', 'filter': {}},
-    }
+    # Try to get category by slug
+    category = None
+    products = Product.objects.filter(is_active=True)
     
-    category_info = category_map.get(category_slug, {'name': 'All Products', 'filter': {}})
+    # Special collections
+    if category_slug == 'bestsellers':
+        products = products.filter(is_bestseller=True)
+        category_name = 'Best Sellers'
+    elif category_slug == 'ready-to-wear':
+        products = products.filter(is_ready_to_wear=True)
+        category_name = 'Ready to Wear'
+    elif category_slug == 'wedding':
+        products = products.filter(is_wedding=True)
+        category_name = 'Wedding Collection'
+    elif category_slug == 'latest':
+        category_name = 'Latest Collection'
+    else:
+        # Get category by slug
+        try:
+            category = Category.objects.get(slug=category_slug, is_active=True)
+            products = products.filter(category=category)
+            category_name = category.name
+        except Category.DoesNotExist:
+            category_name = 'All Products'
     
-    products = Product.objects.filter(is_active=True, **category_info['filter']).order_by('-created_at')
+    products = products.order_by('-created_at')
     
     return render(request, 'products_list.html', {
         'products': products,
-        'category_name': category_info['name'],
+        'category_name': category_name,
         'category_slug': category_slug,
+        'category': category,
     })
+
 
 
 def order_summary(request, slug):
