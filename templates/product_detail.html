@@ -392,9 +392,14 @@
 
                 <!-- Action Buttons -->
                 <div class="product-actions">
-                    <button class="btn btn-cart" onclick="addToCart('{{ product.id }}')">
-                        Add to Cart
-                    </button>
+                    <button class="btn btn-cart" 
+            id="addToCartBtn"
+            data-product-id="{{ product.id }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px; vertical-align: middle;">
+            <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Z" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        Add to Cart
+    </button>
                     <a href="{% url 'order_summary' product.slug %}" class="btn btn-buy">
                         Buy Now
                     </a>
@@ -413,16 +418,150 @@
         </div>
     </footer>
 
-    <script>
-        function addToCart(productId) {
-            alert('Product added to cart! (ID: ' + productId + ')');
-            // TODO: Implement actual cart functionality
+    <!-- ✅ Add this before </body> tag -->
+<script>
+// CSRF Token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
         }
+    }
+    return cookieValue;
+}
 
-        function buyNow(productId) {
-            alert('Redirecting to checkout... (Product ID: ' + productId + ')');
-            // TODO: Implement checkout redirect
+// Add to Cart Function
+document.addEventListener('DOMContentLoaded', function() {
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function() {
+            const productId = this.dataset.productId;
+            
+            // Disable button during request
+            this.disabled = true;
+            this.innerHTML = 'Adding...';
+            
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'quantity=1'
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Re-enable button
+                this.disabled = false;
+                this.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px; vertical-align: middle;">
+                    <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Z" stroke="currentColor" stroke-width="1.5"/>
+                </svg>Add to Cart`;
+                
+                if (data.success) {
+                    updateCartCount();
+                    showNotification(data.message, 'success');
+                } else {
+                    showNotification(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                this.disabled = false;
+                this.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px; vertical-align: middle;">
+                    <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Z" stroke="currentColor" stroke-width="1.5"/>
+                </svg>Add to Cart`;
+                showNotification('Failed to add to cart', 'error');
+            });
+        });
+    }
+    
+    // Update cart count on page load
+    updateCartCount();
+});
+
+// Update Cart Count
+function updateCartCount() {
+    fetch('/cart/count/')
+        .then(response => response.json())
+        .then(data => {
+            const countElement = document.getElementById('cartCount');
+            if (countElement) {
+                countElement.textContent = data.count;
+                if (data.count > 0) {
+                    countElement.style.display = 'flex';
+                } else {
+                    countElement.style.display = 'none';
+                }
+            }
+        })
+        .catch(error => console.error('Cart count error:', error));
+}
+
+// Show Notification
+function showNotification(message, type) {
+    // Remove existing notifications
+    const existingNotifs = document.querySelectorAll('.notification');
+    existingNotifs.forEach(n => n.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#4caf50' : '#f44336'};
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-weight: 600;
+        animation: slideInRight 0.3s ease;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add animation styles
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(400px);
+            opacity: 0;
         }
-    </script>
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(400px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
 </body>
 </html>

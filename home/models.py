@@ -181,7 +181,7 @@ class Order(models.Model):
     state = models.CharField(max_length=100)
     pincode = models.CharField(max_length=10)
     
-    # Product Details - ✅ FIXED with related_name
+    # Product Details
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='orders')
     quantity = models.IntegerField(default=1)
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -221,3 +221,39 @@ class Order(models.Model):
             'refunded': '#9E9E9E',
         }
         return colors.get(self.status, '#000')
+    
+    @property
+    def status_display(self):
+        return dict(self.STATUS_CHOICES).get(self.status, self.status)
+    
+
+class Wishlist(models.Model):
+    session_key = models.CharField(max_length=255, db_index=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ['session_key', 'product']
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.session_key} - {self.product.name}"
+
+
+class Cart(models.Model):
+    session_key = models.CharField(max_length=255, db_index=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ['session_key', 'product']
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.product.name} x {self.quantity}"
+    
+    @property
+    def subtotal(self):
+        return self.product.sale_price * self.quantity

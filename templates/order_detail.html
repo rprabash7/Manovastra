@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order #{{ order.order_id }} - Manovastra</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/orders.css' %}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <section class="order-detail-section">
+        <div class="container">
+            <div class="order-detail-header">
+                <h1>Order Details</h1>
+                <a href="{% url 'my_orders' %}" class="btn-back">← Back to Orders</a>
+            </div>
+
+            <div class="order-detail-content">
+                <!-- Order Summary -->
+                <div class="order-summary-box">
+                    <h2>Order #{{ order.order_id }}</h2>
+                    <div class="order-meta">
+                        <span>Placed on: {{ order.created_at|date:"d M Y, h:i A" }}</span>
+                        <span class="order-status-badge" style="background: {{ order.status_color }}20; color: {{ order.status_color }};">
+                            {{ order.status_display }}
+                        </span>
+                    </div>
+
+                    {% if order.payment_date %}
+                    <p class="payment-info">✅ Payment confirmed on {{ order.payment_date|date:"d M Y, h:i A" }}</p>
+                    {% endif %}
+
+                    {% if order.tracking_id %}
+                    <div class="tracking-box">
+                        <h3>Tracking Information</h3>
+                        <p><strong>Tracking ID:</strong> {{ order.tracking_id }}</p>
+                        {% if order.shipped_date %}
+                        <p>Shipped on: {{ order.shipped_date|date:"d M Y" }}</p>
+                        {% endif %}
+                        {% if order.delivered_date %}
+                        <p>✅ Delivered on: {{ order.delivered_date|date:"d M Y" }}</p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Product Details -->
+                <div class="order-product-box">
+                    <h3>Product Details</h3>
+                    <div class="order-product-detail">
+                        <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}">
+                        <div class="product-detail-info">
+                            <h4>{{ order.product.name }}</h4>
+                            <p>Quantity: {{ order.quantity }}</p>
+                            <p>Price per unit: ₹{{ order.product_price|floatformat:0 }}</p>
+                            <p class="product-total">Total: ₹{{ order.total_amount|floatformat:0 }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Address -->
+                <div class="order-address-box">
+                    <h3>Delivery Address</h3>
+                    <p><strong>{{ order.customer_name }}</strong></p>
+                    <p>{{ order.address }}</p>
+                    <p>{{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
+                    <p>Phone: {{ order.customer_phone }}</p>
+                    <p>Email: {{ order.customer_email }}</p>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="order-payment-box">
+                    <h3>Payment Details</h3>
+                    <div class="payment-row">
+                        <span>Razorpay Order ID:</span>
+                        <span>{{ order.razorpay_order_id }}</span>
+                    </div>
+                    {% if order.razorpay_payment_id %}
+                    <div class="payment-row">
+                        <span>Payment ID:</span>
+                        <span>{{ order.razorpay_payment_id }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="payment-row total">
+                        <span>Total Amount Paid:</span>
+                        <span>₹{{ order.total_amount|floatformat:0 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Manovastra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

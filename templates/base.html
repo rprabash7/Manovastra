@@ -156,11 +156,25 @@
                 </svg>
             </button>
 
-            <a href="#" class="icon-btn" aria-label="Wishlist">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-            </a>
+            <a href="{% url 'wishlist' %}" class="icon-btn wishlist-icon" aria-label="Wishlist">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+    <span class="wishlist-count" id="wishlistCount">0</span>
+</a>
+
+            <a href="{% url 'cart' %}" class="icon-btn cart-icon" aria-label="Cart">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
+    </svg>
+</a>
+
+    <a href="{% url 'my_orders' %}" class="icon-btn orders-icon" aria-label="My Orders">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2M9 2a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1M9 2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1m-6 5h6m-6 4h6m-6 4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+    </a>
+
 
             <a href="#" class="icon-btn" aria-label="Account">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -169,18 +183,6 @@
                 </svg>
             </a>
 
-            <a href="#" class="icon-btn cart-icon" aria-label="Cart">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-                <span class="cart-count">0</span>
-            </a>
-
-            <a href="/manovastra-secure-admin-2025/" class="icon-btn admin-btn hide-mobile" aria-label="Admin" title="Admin Panel">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="currentColor"/>
-                </svg>
-            </a>
         </div>
     </div>
 
@@ -225,16 +227,38 @@
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Search Overlay -->
-    <div class="search-overlay" id="searchOverlay">
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search products...">
+<div class="search-overlay" id="searchOverlay">
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search products..." autocomplete="off">
             <button class="search-close" id="searchClose">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="2"/>
                 </svg>
             </button>
         </div>
+        
+        <!-- Search Results -->
+        <div class="search-results" id="searchResults">
+            <div class="search-loading" id="searchLoading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Searching...</p>
+            </div>
+            
+            <div class="search-products" id="searchProducts"></div>
+            
+            <div class="search-no-results" id="searchNoResults" style="display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                    <path d="M10.364 3a7.364 7.364 0 1 0 0 14.727 7.364 7.364 0 0 0 0-14.727Z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M15.857 15.858 21 21.001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <h3>No products found</h3>
+                <p>Try searching with different keywords</p>
+            </div>
+        </div>
     </div>
+</div>
+
 </header>
 
     <!-- Slideshow -->
@@ -364,25 +388,37 @@
 
 
                     <!-- Image -->
-                    <a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-primary"
-                             loading="lazy">
-                        {% if product.image_hover %}
-                        <img src="{{ product.image_hover.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-hover"
-                             loading="lazy">
-                        {% endif %}
-                        {% else %}
-                        <img src="https://via.placeholder.com/400x500?text=Product" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-primary"
-                             loading="lazy">
-                        {% endif %}
-                    </a>
+<a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
+    {% if product.image %}
+    <img src="{{ product.image.url }}" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-primary"
+         loading="lazy">
+    {% if product.image_hover %}
+    <img src="{{ product.image_hover.url }}" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-hover"
+         loading="lazy">
+    {% endif %}
+    {% else %}
+    <img src="https://via.placeholder.com/400x500?text=Product" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-primary"
+         loading="lazy">
+    {% endif %}
+</a>
+
+<!-- ✅ Add Wishlist Button -->
+<button class="wishlist-btn" 
+        data-product-id="{{ product.id }}"
+        data-product-name="{{ product.name }}"
+        aria-label="Add to wishlist">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+              stroke="currentColor" stroke-width="1.5" fill="none"/>
+    </svg>
+</button>
+
 
 
                     <!-- Product Info -->
@@ -478,25 +514,36 @@
 
 
                     <!-- Image -->
-                    <a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-primary"
-                             loading="lazy">
-                        {% if product.image_hover %}
-                        <img src="{{ product.image_hover.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-hover"
-                             loading="lazy">
-                        {% endif %}
-                        {% else %}
-                        <img src="https://via.placeholder.com/400x500?text=Product" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-primary"
-                             loading="lazy">
-                        {% endif %}
-                    </a>
+<a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
+    {% if product.image %}
+    <img src="{{ product.image.url }}" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-primary"
+         loading="lazy">
+    {% if product.image_hover %}
+    <img src="{{ product.image_hover.url }}" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-hover"
+         loading="lazy">
+    {% endif %}
+    {% else %}
+    <img src="https://via.placeholder.com/400x500?text=Product" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-primary"
+         loading="lazy">
+    {% endif %}
+</a>
+
+<!-- ✅ Add Wishlist Button -->
+<button class="wishlist-btn" 
+        data-product-id="{{ product.id }}"
+        data-product-name="{{ product.name }}"
+        aria-label="Add to wishlist">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+              stroke="currentColor" stroke-width="1.5" fill="none"/>
+    </svg>
+</button>
 
 
                     <!-- Product Info -->
@@ -590,33 +637,38 @@
                     {% endif %}
 
 
-                    <!-- Product Image -->
-                    <a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
-                        {% if product.image %}
-                        <img src="{{ product.image.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-primary"
-                             loading="lazy">
-                        {% if product.image_hover %}
-                        <img src="{{ product.image_hover.url }}" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-hover"
-                             loading="lazy">
-                        {% endif %}
-                        {% else %}
-                        <img src="https://via.placeholder.com/400x500?text=Product" 
-                             alt="{{ product.name }}" 
-                             class="product-image product-image-primary"
-                             loading="lazy">
-                        {% endif %}
-                        
-                        <!-- Quick View Icon (top-right) -->
-                        <div class="quick-view-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 5C7 5 2.73 8.11 1 12.5 2.73 16.89 7 20 12 20s9.27-3.11 11-7.5C21.27 8.11 17 5 12 5zm0 12.5c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
-                            </svg>
-                        </div>
-                    </a>
+                    <!-- Image -->
+<a href="{{ product.get_absolute_url }}" class="product-image-wrapper">
+    {% if product.image %}
+    <img src="{{ product.image.url }}" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-primary"
+         loading="lazy">
+    {% if product.image_hover %}
+    <img src="{{ product.image_hover.url }}" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-hover"
+         loading="lazy">
+    {% endif %}
+    {% else %}
+    <img src="https://via.placeholder.com/400x500?text=Product" 
+         alt="{{ product.name }}" 
+         class="product-image product-image-primary"
+         loading="lazy">
+    {% endif %}
+</a>
+
+<!-- ✅ Add Wishlist Button -->
+<button class="wishlist-btn" 
+        data-product-id="{{ product.id }}"
+        data-product-name="{{ product.name }}"
+        aria-label="Add to wishlist">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" 
+              stroke="currentColor" stroke-width="1.5" fill="none"/>
+    </svg>
+</button>
+
 
 
                     <!-- Product Info -->
@@ -881,6 +933,8 @@
 
 
     <script src="{% static 'js/protection.min.js' %}"></script>
+
+    <script src="{% static 'js/wishlist.js' %}"></script> 
 
 
 </body>

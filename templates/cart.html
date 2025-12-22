@@ -1,0 +1,307 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Manovastra</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    
+    <!-- ✅ Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    
+    <section class="cart-section">
+        <div class="container">
+            <div class="cart-header">
+                <h1>Shopping Cart</h1>
+                <p>{{ cart_count }} item{{ cart_count|pluralize }}</p>
+            </div>
+
+            {% if cart_items %}
+            <div class="cart-content">
+                <!-- Left Side: Cart Items -->
+                <div class="cart-left">
+                    <div class="cart-items">
+                        {% for item in cart_items %}
+                        <div class="cart-item" data-product-id="{{ item.product.id }}">
+                            <div class="cart-item-image">
+                                <a href="{{ item.product.get_absolute_url }}">
+                                    {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                    {% else %}
+                                    <img src="https://via.placeholder.com/150x200?text=No+Image" alt="{{ item.product.name }}">
+                                    {% endif %}
+                                </a>
+                            </div>
+
+                            <div class="cart-item-details">
+                                <a href="{{ item.product.get_absolute_url }}" class="cart-item-name">
+                                    {{ item.product.name }}
+                                </a>
+                                <p class="cart-item-category">{{ item.product.get_category_display }}</p>
+                                <p class="cart-item-price">₹{{ item.product.sale_price|floatformat:0 }}</p>
+                            </div>
+
+                            <div class="cart-item-quantity">
+                                <button class="qty-btn qty-minus" 
+                                        data-product-id="{{ item.product.id }}"
+                                        data-action="decrease">-</button>
+                                <input type="number" 
+                                       class="qty-input" 
+                                       value="{{ item.quantity }}"
+                                       min="1"
+                                       max="{{ item.product.stock_quantity }}"
+                                       data-product-id="{{ item.product.id }}"
+                                       readonly>
+                                <button class="qty-btn qty-plus" 
+                                        data-product-id="{{ item.product.id }}"
+                                        data-action="increase">+</button>
+                            </div>
+
+                            <div class="cart-item-subtotal">
+                                <p class="subtotal-amount">₹{{ item.subtotal|floatformat:0 }}</p>
+                            </div>
+
+                            <button class="cart-item-remove" 
+                                    data-product-id="{{ item.product.id }}"
+                                    aria-label="Remove item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- ✅ Delivery Address Form -->
+                    <div class="delivery-section">
+                        <h2 class="section-title">Delivery Address</h2>
+                        <form id="orderForm">
+                            {% csrf_token %}
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Full Name *</label>
+                                    <input type="text" name="full_name" id="full_name" class="form-input" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Phone Number *</label>
+                                    <input type="tel" name="phone" id="phone" class="form-input" required pattern="[0-9]{10}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Email *</label>
+                                <input type="email" name="email" id="email" class="form-input" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Address *</label>
+                                <input type="text" name="address" id="address" class="form-input" required placeholder="House No, Building Name, Street">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">City *</label>
+                                    <input type="text" name="city" id="city" class="form-input" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">State *</label>
+                                    <input type="text" name="state" id="state" class="form-input" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Pincode *</label>
+                                <input type="text" name="pincode" id="pincode" class="form-input" required pattern="[0-9]{6}">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right Side: Cart Summary -->
+                <div class="cart-summary">
+                    <h2>Order Summary</h2>
+                    
+                    <div class="summary-row">
+                        <span>Subtotal ({{ cart_count }} items)</span>
+                        <span id="summarySubtotal">₹{{ subtotal|floatformat:0 }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span id="summaryShipping">
+                            {% if shipping == 0 %}
+                            <span class="free-shipping">FREE</span>
+                            {% else %}
+                            ₹{{ shipping|floatformat:0 }}
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    {% if subtotal < 1000 and shipping > 0 %}
+                    <p class="shipping-info">Add ₹{{ 1000|add:"-"|add:subtotal|floatformat:0 }} more for FREE shipping!</p>
+                    {% endif %}
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span id="summaryTotal">₹{{ total|floatformat:0 }}</span>
+                    </div>
+
+                    <button type="button" class="btn-checkout" id="paymentBtn">
+                        Continue to Payment
+                    </button>
+
+                    <a href="/" class="btn-continue-shopping">Continue Shopping</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="cart-empty">
+                <svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+                    <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" 
+                          stroke="#ccc" stroke-width="1.5"/>
+                </svg>
+                <h2>Your Cart is Empty</h2>
+                <p>Add products to your cart and come back here to checkout</p>
+                <a href="/" class="btn-start-shopping">Start Shopping</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <script src="{% static 'js/cart.js' %}"></script>
+    
+    <!-- ✅ Payment Integration Script -->
+    <script>
+        const paymentBtn = document.getElementById('paymentBtn');
+        const currentTotal = {{ total }};
+        const currentSubtotal = {{ subtotal }};
+        const currentShipping = {{ shipping }};
+
+        if (paymentBtn) {
+            paymentBtn.addEventListener('click', function() {
+                const form = document.getElementById('orderForm');
+                
+                // Validate form
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+
+                // Get form data
+                const formData = {
+                    full_name: document.getElementById('full_name').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    pincode: document.getElementById('pincode').value,
+                    subtotal: currentSubtotal,
+                    shipping: currentShipping,
+                    total: currentTotal
+                };
+
+                // Disable button
+                paymentBtn.disabled = true;
+                paymentBtn.textContent = 'Processing...';
+
+                // Create Razorpay order
+                fetch('/create-order/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        amount: currentTotal,
+                        ...formData
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.order_id) {
+                        openRazorpay(data, formData);
+                    } else {
+                        alert('Error creating order. Please try again.');
+                        paymentBtn.disabled = false;
+                        paymentBtn.textContent = 'Continue to Payment';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again.');
+                    paymentBtn.disabled = false;
+                    paymentBtn.textContent = 'Continue to Payment';
+                });
+            });
+        }
+
+        // ✅ Open Razorpay Payment Gateway
+        function openRazorpay(orderData, formData) {
+            const options = {
+                key: '{{ razorpay_key_id }}',
+                amount: orderData.amount,
+                currency: 'INR',
+                name: 'Manovastra',
+                description: 'Order Payment',
+                image: '{{ request.scheme }}://{{ request.get_host }}{% static "Images/Manovastra.png" %}',
+                order_id: orderData.order_id,
+                handler: function(response) {
+                    verifyPayment(response, formData);
+                },
+                prefill: {
+                    name: formData.full_name,
+                    email: formData.email,
+                    contact: formData.phone
+                },
+                theme: {
+                    color: '#d32f2f'
+                },
+                modal: {
+                    ondismiss: function() {
+                        paymentBtn.disabled = false;
+                        paymentBtn.textContent = 'Continue to Payment';
+                    }
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        // ✅ Verify Payment
+        function verifyPayment(paymentResponse, formData) {
+            fetch('/verify-payment/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    ...paymentResponse,
+                    ...formData,
+                    amount: currentTotal
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/order-success/?order_id=' + data.order_id;
+                } else {
+                    alert('Payment verification failed. Please contact support.');
+                    paymentBtn.disabled = false;
+                    paymentBtn.textContent = 'Continue to Payment';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

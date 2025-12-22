@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Manovastra</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/orders.css' %}">
+</head>
+<body>
+    
+    <section class="orders-section">
+        <div class="container">
+            <div class="orders-header">
+                <h1>My Orders</h1>
+                <p>{{ orders_count }} order{{ orders_count|pluralize }}</p>
+            </div>
+
+            {% if orders %}
+            <div class="orders-list">
+                {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div class="order-info">
+                            <h3>Order #{{ order.order_id }}</h3>
+                            <p class="order-date">{{ order.created_at|date:"d M Y, h:i A" }}</p>
+                        </div>
+                        <div class="order-status" style="background: {{ order.status_color }}20; color: {{ order.status_color }};">
+                            {{ order.status_display }}
+                        </div>
+                    </div>
+
+                    <div class="order-card-body">
+                        <div class="order-product">
+                            <img src="{{ order.product.image.url }}" alt="{{ order.product.name }}" class="order-product-image">
+                            <div class="order-product-info">
+                                <h4>{{ order.product.name }}</h4>
+                                <p>Quantity: {{ order.quantity }}</p>
+                                <p class="order-price">₹{{ order.total_amount|floatformat:0 }}</p>
+                            </div>
+                        </div>
+
+                        <div class="order-delivery">
+                            <h5>Delivery Address</h5>
+                            <p>{{ order.customer_name }}</p>
+                            <p>{{ order.address }}</p>
+                            <p>{{ order.city }}, {{ order.state }} - {{ order.pincode }}</p>
+                            <p>Phone: {{ order.customer_phone }}</p>
+                        </div>
+                    </div>
+
+                    <div class="order-card-footer">
+                        {% if order.tracking_id %}
+                        <span class="tracking-info">Tracking: {{ order.tracking_id }}</span>
+                        {% endif %}
+                        <a href="{% url 'order_detail' order.order_id %}" class="btn-view-order">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="orders-empty">
+                <svg width="100" height="100" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2M9 2a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1M9 2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1m-6 5h6m-6 4h6m-6 4h4" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <h2>No Orders Yet</h2>
+                <p>You haven't placed any orders</p>
+                <a href="/" class="btn-start-shopping">Start Shopping</a>
+                <a href="{% url 'track_order' %}" class="btn-track-order">Track Order</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Manovastra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
