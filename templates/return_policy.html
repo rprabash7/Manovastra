@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return & Refund Policy - Manovastra</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .policy-section {
+            padding: 60px 0;
+            background: #f8f8f8;
+        }
+        
+        .policy-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .policy-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #d32f2f;
+        }
+        
+        .policy-header h1 {
+            font-size: 2.5rem;
+            color: #1c1c1c;
+            margin-bottom: 10px;
+        }
+        
+        .policy-header .last-updated {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .policy-highlight {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .policy-highlight h2 {
+            color: #e65100;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .policy-highlight p {
+            color: #555;
+            line-height: 1.8;
+            margin: 0;
+            font-size: 1.05rem;
+        }
+        
+        .policy-content h3 {
+            color: #1c1c1c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .policy-content p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .policy-content ul {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        .policy-content ul li {
+            color: #555;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+        
+        .policy-note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .policy-note p {
+            margin: 0;
+            color: #0d47a1;
+        }
+        
+        .contact-support {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .contact-support h3 {
+            color: #1c1c1c;
+            margin-bottom: 15px;
+        }
+        
+        .contact-support p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .btn-contact {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #d32f2f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .btn-contact:hover {
+            background: #b71c1c;
+        }
+        
+        @media (max-width: 768px) {
+            .policy-container {
+                padding: 25px;
+            }
+            
+            .policy-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <section class="policy-section">
+        <div class="container">
+            <div class="policy-container">
+                <div class="policy-header">
+                    <h1>Return & Refund Policy</h1>
+                    <p class="last-updated">Last Updated: December 24, 2025</p>
+                </div>
+
+                <!-- Main Policy Highlight -->
+                <div class="policy-highlight">
+                    <h2>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Important Notice
+                    </h2>
+                    <p><strong>All sales are final.</strong> Once an order is placed and payment is confirmed, we do not accept returns, exchanges, or provide refunds under any circumstances. Please review your order carefully before completing the purchase.</p>
+                </div>
+
+                <div class="policy-content">
+                    <h3>📋 Policy Overview</h3>
+                    <p>At Manovastra, we take pride in offering high-quality traditional wear. Due to the nature of our products and customization involved, we maintain a strict <strong>No Return, No Exchange, No Refund Policy</strong>.</p>
+
+                    <h3>🚫 What This Means</h3>
+                    <ul>
+                        <li><strong>No Returns:</strong> Products cannot be returned once delivered</li>
+                        <li><strong>No Exchanges:</strong> Size, color, or design exchanges are not available</li>
+                        <li><strong>No Refunds:</strong> Payment refunds are not provided after order confirmation</li>
+                        <li><strong>No Cancellations:</strong> Orders cannot be cancelled after payment</li>
+                    </ul>
+
+                    <h3>✅ Why This Policy?</h3>
+                    <p>Our traditional wear items are carefully crafted with specific attention to detail. Many pieces involve:</p>
+                    <ul>
+                        <li>Handcrafted elements and embroidery</li>
+                        <li>Premium fabric selection</li>
+                        <li>Traditional designs that cannot be resold</li>
+                        <li>Quality checks before dispatch</li>
+                    </ul>
+
+                    <div class="policy-note">
+                        <p><strong>💡 Pro Tip:</strong> Please check product descriptions, size charts, images, and reviews carefully before placing your order.</p>
+                    </div>
+
+                    <h3>📦 Before You Order</h3>
+                    <p>We strongly recommend you:</p>
+                    <ul>
+                        <li>Verify product details including size, color, and design</li>
+                        <li>Check delivery address and contact information</li>
+                        <li>Review product images and descriptions thoroughly</li>
+                        <li>Contact our support team if you have any doubts</li>
+                    </ul>
+
+                    <h3>🛡️ Quality Assurance</h3>
+                    <p>We ensure every product undergoes strict quality checks before shipping. If you receive a damaged or defective product due to manufacturing issues, please contact us within <strong>24 hours of delivery</strong> with clear images. We will review on a case-by-case basis.</p>
+
+                    <div class="policy-note">
+                        <p><strong>Note:</strong> Damage claims must be reported immediately upon delivery with photographic evidence.</p>
+                    </div>
+
+                    <h3>📱 Questions Before Purchase?</h3>
+                    <p>If you have any questions about products, sizing, or our policy, please reach out to our customer support team BEFORE placing your order. We're here to help!</p>
+
+                    <h3>⚖️ Legal Terms</h3>
+                    <p>By placing an order on Manovastra, you acknowledge and agree to this Return & Refund Policy. This policy is binding and forms part of the Terms & Conditions of purchase.</p>
+
+                    <h3>🔄 Policy Updates</h3>
+                    <p>We reserve the right to modify this policy at any time. Changes will be effective immediately upon posting on the website. Continued use of our services constitutes acceptance of the updated policy.</p>
+                </div>
+
+                <div class="contact-support">
+                    <h3>Need Help?</h3>
+                    <p>Our customer support team is available to answer any questions before you place your order.</p>
+                    <a href="mailto:support@manovastra.com" class="btn-contact">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Manovastra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

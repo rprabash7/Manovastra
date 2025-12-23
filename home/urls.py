@@ -33,4 +33,7 @@ urlpatterns = [
     path('orders/<str:order_id>/', views.order_detail, name='order_detail'),
     path('track-order/', views.track_order, name='track_order'),
 
+    # Policy URL
+    path('return-policy/', views.return_policy, name='return_policy'),
+
 ]

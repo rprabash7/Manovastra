@@ -586,3 +586,8 @@ def track_order(request):
         'order': order,
         'error': error
     })
+
+
+def return_policy(request):
+    """Return Policy Page"""
+    return render(request, 'return_policy.html')

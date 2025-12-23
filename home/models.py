@@ -201,6 +201,10 @@ class Order(models.Model):
     # Admin Notes
     admin_notes = models.TextField(blank=True, help_text="Internal notes for admin")
     
+    # ✅ Policy Agreement (NEW FIELDS)
+    policy_agreed = models.BooleanField(default=False, help_text="Customer agreed to no-return policy")
+    policy_agreed_at = models.DateTimeField(null=True, blank=True, help_text="When policy was agreed")
+    
     class Meta:
         ordering = ['-created_at']
         verbose_name = "Customer Order"
@@ -225,6 +229,7 @@ class Order(models.Model):
     @property
     def status_display(self):
         return dict(self.STATUS_CHOICES).get(self.status, self.status)
+
     
 
 class Wishlist(models.Model):

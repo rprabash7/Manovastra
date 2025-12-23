@@ -440,6 +440,28 @@
                         </div>
                     </div>
 
+                    <!-- Policy Agreement -->
+<div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; border: 2px solid #ddd;">
+    <label style="display: flex; align-items: start; gap: 12px; cursor: pointer;">
+        <input type="checkbox" id="policyAgree" required style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer;">
+        <span style="color: #333; line-height: 1.6;">
+            I understand and agree that <strong>all sales are final</strong>. No returns, exchanges, or refunds will be provided. 
+            I have reviewed my order carefully and accept the 
+            <a href="{% url 'return_policy' %}" target="_blank" style="color: #d32f2f; text-decoration: underline;">Return Policy</a>.
+        </span>
+    </label>
+</div>
+
+<script>
+document.getElementById('policyAgree').addEventListener('change', function() {
+    document.getElementById('paymentBtn').disabled = !this.checked;
+});
+
+// Disable payment button by default
+document.getElementById('paymentBtn').disabled = true;
+</script>
+
+
                     <button type="button" class="continue-btn" id="paymentBtn">
                         Continue to Payment
                     </button>
@@ -698,6 +720,41 @@
                 }
             });
         }
+
+
+// Policy Confirmation Modal
+function showPolicyConfirmation() {
+    if (!document.getElementById('policyAgree').checked) {
+        alert('Please accept the Return Policy to proceed.');
+        return false;
+    }
+    
+    const confirmed = confirm(
+        '⚠️ IMPORTANT REMINDER ⚠️\n\n' +
+        'Once you complete this payment:\n\n' +
+        '✘ NO RETURNS will be accepted\n' +
+        '✘ NO REFUNDS will be provided\n' +
+        '✘ NO EXCHANGES available\n\n' +
+        'Are you sure you want to proceed?'
+    );
+    
+    if (confirmed) {
+        // Proceed with payment
+        return true;
+    }
+    return false;
+}
+
+// Attach to payment button
+document.getElementById('paymentBtn').addEventListener('click', function(e) {
+    if (!showPolicyConfirmation()) {
+        e.preventDefault();
+    }
+});
+
+
+
     </script>
+
 </body>
 </html>
