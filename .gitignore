@@ -15,3 +15,25 @@ db.sqlite3-journal
 # Environment
 .env
 .env.local
+
+# Database files
+*.sqlite3
+*.db
+db.sqlite3*
+*.backup
+
+# Media files (user uploads - don't version control)
+media/products/
+media/products/hover/
+
+# Virtual environment
+venv/
+
+# Logs
+logs/
+
+# Static files
+staticfiles/
+
+# Local config
+gunicorn_config.py

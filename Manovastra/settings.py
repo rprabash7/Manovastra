@@ -87,10 +87,11 @@ DATABASES = {
         'NAME': 'manovastra_db',
         'USER': 'manovastra_user',
         'PASSWORD': 'Manovastra@2025#Strong',
-        'HOST': 'localhost',  # or your EC2 IP if working remotely
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
 
 
 # Password validation
