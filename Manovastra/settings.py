@@ -83,10 +83,15 @@ WSGI_APPLICATION = 'Manovastra.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'manovastra_db',
+        'USER': 'manovastra_user',
+        'PASSWORD': 'Manovastra@2025#Strong',
+        'HOST': 'localhost',  # or your EC2 IP if working remotely
+        'PORT': '5432',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
