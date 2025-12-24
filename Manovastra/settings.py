@@ -132,3 +132,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Razorpay Configuration
 RAZORPAY_KEY_ID = 'rzp_live_RtsgUy0nSq28NC'  # Your Key ID
 RAZORPAY_KEY_SECRET = 'EypWUnAiUZcrDnuJ0Rg7o5Zd'  # Your Key Secret
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
