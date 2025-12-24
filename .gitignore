@@ -40,3 +40,21 @@ logs/
 
 # Config
 gunicorn_config.py
+
+# Media files - Never commit uploaded images
+media/
+!media/.gitkeep
+
+# But keep the folder structure
+!media/products/
+!media/categories/
+!media/occasions/
+!media/slides/
+!media/testimonials/
+
+# Keep .gitkeep files
+!media/products/.gitkeep
+!media/categories/.gitkeep
+!media/occasions/.gitkeep
+!media/slides/.gitkeep
+!media/testimonials/.gitkeep
