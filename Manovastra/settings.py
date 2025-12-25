@@ -12,10 +12,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import socket
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Auto-detect environment
+hostname = socket.gethostname()
+IS_EC2 = hostname.startswith('ip-') or 'ec2' in hostname.lower()
+
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -26,18 +32,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 SECRET_KEY = 'django-insecure-le6k3j1eqb!egll$xgqwu*r&3swh@%(z2%&u@v3g7=#2*m^)9r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = [
-    '13.232.28.7',           # EC2 IP ⭐ ADD THIS
-    'manovastra.net',        # Domain
-    'www.manovastra.net',    # www
-    'localhost', '127.0.0.1' # Local
-]
-
+# DEBUG and ALLOWED_HOSTS based on environment
+if IS_EC2:
+    DEBUG = False
+    ALLOWED_HOSTS = ['manovastra.net', 'www.manovastra.net', '13.232.28.7']
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -78,21 +81,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Manovastra.wsgi.application'
 
-# Database
+# Database Configuration - Environment based
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'manovastra_db',
-        'USER': 'manovastra_user',
-        'PASSWORD': 'Manovastra@2025#Strong',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if IS_EC2:
+    # Production - PostgreSQL on EC2
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'manovastra_db',
+            'USER': 'manovastra_user',
+            'PASSWORD': 'Manovastra@2025#Strong',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
     }
-}
-
-
+else:
+    # Local Development - SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db_local.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -141,5 +152,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 RAZORPAY_KEY_ID = 'rzp_live_RtsgUy0nSq28NC'  # Your Key ID
 RAZORPAY_KEY_SECRET = 'EypWUnAiUZcrDnuJ0Rg7o5Zd'  # Your Key Secret
 
+# File upload settings
 FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB

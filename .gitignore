@@ -58,3 +58,12 @@ media/
 !media/occasions/.gitkeep
 !media/slides/.gitkeep
 !media/testimonials/.gitkeep
+
+# Local development database
+db_local.sqlite3
+db_local.sqlite3-journal
+
+# Don't commit any database files
+*.sqlite3
+*.db
+!db/.gitkeep
