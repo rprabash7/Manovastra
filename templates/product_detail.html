@@ -31,8 +31,6 @@
         
         /* Product Image Section */
         .product-detail-images {
-          /*  position: sticky; */
-            top: 100px;
             height: fit-content;
         }
         
@@ -53,6 +51,47 @@
         
         .main-product-image img:hover {
             transform: scale(1.05);
+        }
+        
+        /* Color Selection */
+        .color-selection {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .color-selection h4 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            color: #333;
+        }
+        
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        
+        .color-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .color-btn:hover {
+            border-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+        
+        .color-btn.active {
+            border-color: #d32f2f;
+            background: #d32f2f;
+            color: white;
         }
         
         /* Product Info Section */
@@ -239,153 +278,72 @@
 <body>
     <!-- Header -->
     <header class="header">
-    <div class="container">
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M1 19h22M1 12h22M1 5h22" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-        </button>
-
-        <div class="header-logo">
-            <a href="/">
-                <img src="{% static 'Images/Manovastra.png' %}" alt="Manovastra Logo">
-            </a>
-        </div>
-
-        <nav class="header-nav">
-            <ul class="nav-list">
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link">Categories</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'category_products' 'sarees' %}">Sarees</a></li>
-                        <li><a href="{% url 'category_products' 'kurta-set' %}">Kurta Set</a></li>
-                        <li><a href="{% url 'category_products' 'kurtis' %}">Kurtis</a></li>
-                        <li><a href="{% url 'category_products' 'gowns' %}">Gowns</a></li>
-                        <li><a href="{% url 'category_products' 'lehengas' %}">Lehengas</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'category_products' 'bestsellers' %}" class="nav-link">Best Selling Sarees</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'category_products' 'latest' %}" class="nav-link">Latest Sarees Collection</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="{% url 'category_products' 'wedding' %}" class="nav-link">Wedding Picks</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{% url 'category_products' 'wedding' %}">All Wedding Collection</a></li>
-                        <li><a href="{% url 'category_products' 'sarees' %}">Wedding Sarees</a></li>
-                        <li><a href="{% url 'category_products' 'lehengas' %}">Bridal Lehengas</a></li>
-                        <li><a href="{% url 'category_products' 'gowns' %}">Wedding Gowns</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="header-icons">
-            <button class="icon-btn" id="searchBtn" aria-label="Search">
+        <div class="container">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M10.364 3a7.364 7.364 0 1 0 0 14.727 7.364 7.364 0 0 0 0-14.727Z" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M15.857 15.858 21 21.001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M1 19h22M1 12h22M1 5h22" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
             </button>
 
-            <a href="{% url 'wishlist' %}" class="icon-btn wishlist-icon" aria-label="Wishlist">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
-    </svg>
-    <span class="wishlist-count" id="wishlistCount">0</span>
-</a>
-
-            <a href="{% url 'cart' %}" class="icon-btn cart-icon" aria-label="Cart">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
-    </svg>
-</a>
-
-    <a href="{% url 'my_orders' %}" class="icon-btn orders-icon" aria-label="My Orders">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M9 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2M9 2a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1M9 2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1m-6 5h6m-6 4h6m-6 4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-    </a>
-
-        </div>
-    </div>
-
-    <!-- Mobile Sidebar -->
-    <div class="mobile-sidebar" id="mobileSidebar">
-        <div class="sidebar-header">
-            <h3>Menu</h3>
-            <button class="sidebar-close" id="sidebarClose">
-                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
-                    <path d="m1 1 14 14M1 15 15 1" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-            </button>
-        </div>
-        
-        <nav class="sidebar-nav">
-            <ul>
-                <li class="sidebar-dropdown">
-                    <a href="#" class="sidebar-link">Categories ▼</a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="{% url 'category_products' 'sarees' %}">Sarees</a></li>
-                        <li><a href="{% url 'category_products' 'kurta-set' %}">Kurta Set</a></li>
-                        <li><a href="{% url 'category_products' 'kurtis' %}">Kurtis</a></li>
-                        <li><a href="{% url 'category_products' 'gowns' %}">Gowns</a></li>
-                        <li><a href="{% url 'category_products' 'lehengas' %}">Lehengas</a></li>
-                    </ul>
-                </li>
-                <li><a href="{% url 'category_products' 'bestsellers' %}">Best Selling Sarees</a></li>
-                <li><a href="{% url 'category_products' 'latest' %}">Latest Sarees Collection</a></li>
-                <li class="sidebar-dropdown">
-                    <a href="#" class="sidebar-link">Wedding Picks ▼</a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="{% url 'category_products' 'wedding' %}">All Wedding Collection</a></li>
-                        <li><a href="{% url 'category_products' 'sarees' %}">Wedding Sarees</a></li>
-                        <li><a href="{% url 'category_products' 'lehengas' %}">Bridal Lehengas</a></li>
-                        <li><a href="{% url 'category_products' 'gowns' %}">Wedding Gowns</a></li>
-                    </ul>
-                </li>
-                <li><a href="/manovastra-secure-admin-2025/">Admin Panel</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-    <!-- Search Overlay -->
-<div class="search-overlay" id="searchOverlay">
-    <div class="search-container">
-        <div class="search-box">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search products..." autocomplete="off">
-            <button class="search-close" id="searchClose">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="m6 6 12 12M6 18 18 6" stroke="currentColor" stroke-width="2"/>
-                </svg>
-            </button>
-        </div>
-        
-        <!-- Search Results -->
-        <div class="search-results" id="searchResults">
-            <div class="search-loading" id="searchLoading" style="display: none;">
-                <div class="spinner"></div>
-                <p>Searching...</p>
+            <div class="header-logo">
+                <a href="/">
+                    <img src="{% static 'Images/Manovastra.png' %}" alt="Manovastra Logo">
+                </a>
             </div>
-            
-            <div class="search-products" id="searchProducts"></div>
-            
-            <div class="search-no-results" id="searchNoResults" style="display: none;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                    <path d="M10.364 3a7.364 7.364 0 1 0 0 14.727 7.364 7.364 0 0 0 0-14.727Z" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M15.857 15.858 21 21.001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                <h3>No products found</h3>
-                <p>Try searching with different keywords</p>
+
+            <nav class="header-nav">
+                <ul class="nav-list">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link">Categories</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'category_products' 'sarees' %}">Sarees</a></li>
+                            <li><a href="{% url 'category_products' 'kurta-set' %}">Kurta Set</a></li>
+                            <li><a href="{% url 'category_products' 'kurtis' %}">Kurtis</a></li>
+                            <li><a href="{% url 'category_products' 'gowns' %}">Gowns</a></li>
+                            <li><a href="{% url 'category_products' 'lehengas' %}">Lehengas</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'category_products' 'bestsellers' %}" class="nav-link">Best Sellers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'category_products' 'latest' %}" class="nav-link">Latest Collection</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'category_products' 'wedding' %}" class="nav-link">Wedding Picks</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-icons">
+                <button class="icon-btn" id="searchBtn" aria-label="Search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M10.364 3a7.364 7.364 0 1 0 0 14.727 7.364 7.364 0 0 0 0-14.727Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M15.857 15.858 21 21.001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+
+                <a href="{% url 'wishlist' %}" class="icon-btn wishlist-icon" aria-label="Wishlist">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                    <span class="wishlist-count" id="wishlistCount">0</span>
+                </a>
+
+                <a href="{% url 'cart' %}" class="icon-btn cart-icon" aria-label="Cart">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Zm2.75 0v-1.5a4.5 4.5 0 0 1 4.5-4.5v0a4.5 4.5 0 0 1 4.5 4.5v1.5" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </a>
+
+                <a href="{% url 'my_orders' %}" class="icon-btn orders-icon" aria-label="My Orders">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-2M9 2a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1M9 2a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1m-6 5h6m-6 4h6m-6 4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </a>
             </div>
         </div>
-    </div>
-</div>
-
-</header>
+    </header>
 
     <!-- Product Detail Section -->
     <section class="product-detail-section">
@@ -393,13 +351,27 @@
             <!-- Product Images -->
             <div class="product-detail-images">
                 <div class="main-product-image">
-    {% if product.image %}
-        <img src="{{ product.image.url }}" alt="{{ product.name }}">
-    {% else %}
-        <img src="https://via.placeholder.com/600x800?text={{ product.name }}" alt="{{ product.name }}">
-    {% endif %}
-</div>
+                    {% if product.image %}
+                    <img id="mainProductImage" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                    <img id="mainProductImage" src="https://via.placeholder.com/600x800?text={{ product.name }}" alt="{{ product.name }}">
+                    {% endif %}
+                </div>
 
+                <!-- Color Selection -->
+                {% if color_images %}
+                <div class="color-selection">
+                    <h4>Available Colors:</h4>
+                    <div class="color-options">
+                        {% for img in color_images %}
+                        <button class="color-btn {% if forloop.first %}active{% endif %}" 
+                                onclick="changeProductImage('{{ img.image.url }}', this)">
+                            {{ img.color }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
 
             <!-- Product Info -->
@@ -451,7 +423,7 @@
                     {% if product.description %}
                     <p>{{ product.description }}</p>
                     {% else %}
-                    <p>Premium quality {{ product.name }} perfect for any occasion. Crafted with attention to detail and designed for comfort and style.</p>
+                    <p>Premium quality {{ product.name }} perfect for any occasion.</p>
                     {% endif %}
 
                     <div class="product-info-grid">
@@ -469,10 +441,12 @@
                         </div>
                         {% endif %}
                         
+                        {% if product.category %}
                         <div class="info-item">
                             <span class="info-label">Category</span>
-                            <span class="info-value">{{ product.get_category_display }}</span>
+                            <span class="info-value">{{ product.category.name }}</span>
                         </div>
+                        {% endif %}
                         
                         <div class="info-item">
                             <span class="info-label">Stock</span>
@@ -482,33 +456,24 @@
                 </div>
 
                 <!-- Return Policy Notice -->
-<div style="background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 6px;">
-    <p style="margin: 0; color: #e65100; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        No Returns/Refunds
-    </p>
-    <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9rem;">
-        All sales are final. Please review carefully before ordering. 
-        <a href="{% url 'return_policy' %}" style="color: #d32f2f; text-decoration: underline;">View Policy</a>
-    </p>
-</div>
+                <div style="background: #fff3e0; border-left: 4px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 6px;">
+                    <p style="margin: 0; color: #e65100; font-weight: 600;">
+                        ⚠️ No Returns/Refunds
+                    </p>
+                    <p style="margin: 8px 0 0 0; color: #666; font-size: 0.9rem;">
+                        All sales are final. 
+                        <a href="{% url 'return_policy' %}" style="color: #d32f2f; text-decoration: underline;">View Policy</a>
+                    </p>
+                </div>
 
                 <!-- Action Buttons -->
                 <div class="product-actions">
-                    <button class="btn btn-cart" 
-            id="addToCartBtn"
-            data-product-id="{{ product.id }}">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px; vertical-align: middle;">
-            <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Z" stroke="currentColor" stroke-width="1.5"/>
-        </svg>
-        Add to Cart
-    </button>
-                    <a href="{% url 'order_summary' product.slug %}" class="btn btn-buy">
+                    <button class="btn btn-cart" id="addToCartBtn" data-product-id="{{ product.id }}">
+                        Add to Cart
+                    </button>
+                    <a href="{% url 'order_summary' product.slug %}" class="btn btn-buy" id="buyNowBtn">
                         Buy Now
                     </a>
-
                 </div>
             </div>
         </div>
@@ -516,245 +481,102 @@
 
     <!-- Footer -->
     <footer class="footer">
-    <div class="container">
-        <div class="footer-inner">
-            <!-- Footer Blocks -->
-            <div class="footer-blocks">
-                <!-- About Block -->
-                <div class="footer-block footer-about">
-                    <h3 class="footer-title">About Manovastra</h3>
-                    <div class="footer-content">
-                        <p>Manovastra is your destination for premium quality sarees and ethnic wear. Established with a vision to deliver top-quality fabrics and a wide range of fashion products for the modern woman.</p>
-                        <p>Our diverse product portfolio includes Sarees, Kurtis, Gowns, and Lehengas, thoughtfully crafted for a wide spectrum of customers across the country.</p>
-                        <p>With innovation in design and excellence in craftsmanship, we are committed to creating styles that make every woman feel confident, graceful, and beautifully unique.</p>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="footer-block">
-                    <h3 class="footer-title">Quick Links</h3>
-                    <ul class="footer-menu">
-                        <li><a href="{% url 'welcome' %}">Home</a></li>
-                        <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
-                        <li><a href="{% url 'cart' %}">Shopping Cart</a></li>
-                        <li><a href="{% url 'my_orders' %}">My Orders</a></li>
-                        <li><a href="{% url 'track_order' %}">Track Order</a></li>
-                        <li><a href="{% url 'return_policy' %}">Return Policy</a></li>
-                    </ul>
-                </div>
-
-                <!-- Contact Information -->
-                <div class="footer-block footer-contact">
-                    <h3 class="footer-title">Contact Us</h3>
-                    <div class="footer-content">
-                        <div class="contact-item">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                            </svg>
-                            <a href="tel:+919353823619" style="text-decoration: none;
-                            color: white;">+91 93538 23619</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Newsletter -->
-                <div class="footer-block footer-newsletter">
-                    <h3 class="footer-title">Newsletter</h3>
-                    <div class="footer-content">
-                        <p>Subscribe to get notified about product launches, special offers and company news.</p>
-                        <form method="post" action="{% url 'subscribe_newsletter' %}" class="newsletter-form">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <input type="email" 
-                                       name="email" 
-                                       placeholder="Enter your email" 
-                                       class="newsletter-input"
-                                       required>
-                                <button type="submit" class="newsletter-btn">Subscribe</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Social Media -->
-            <div class="footer-social">
-                <a href="https://www.instagram.com/manov_astra?utm_source=qr&igsh=MWxvcDlzdmNrcWI3cw==" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2.4c-2.607 0-2.934.011-3.958.058-1.022.046-1.72.209-2.33.446a4.705 4.705 0 0 0-1.7 1.107 4.706 4.706 0 0 0-1.108 1.7c-.237.611-.4 1.31-.446 2.331C2.41 9.066 2.4 9.392 2.4 12c0 2.607.011 2.934.058 3.958.046 1.022.209 1.72.446 2.33a4.706 4.706 0 0 0 1.107 1.7c.534.535 1.07.863 1.7 1.108.611.237 1.309.4 2.33.446 1.025.047 1.352.058 3.959.058s2.934-.011 3.958-.058c1.022-.046 1.72-.209 2.33-.446a4.706 4.706 0 0 0 1.7-1.107 4.706 4.706 0 0 0 1.108-1.7c.237-.611.4-1.31.446-2.33.047-1.025.058-1.352.058-3.959s-.011-2.934-.058-3.958c-.047-1.022-.209-1.72-.446-2.33a4.706 4.706 0 0 0-1.107-1.7 4.705 4.705 0 0 0-1.7-1.108c-.611-.237-1.31-.4-2.331-.446C14.934 2.41 14.608 2.4 12 2.4Zm0 1.73c2.563 0 2.867.01 3.88.056.935.042 1.443.199 1.782.33.448.174.768.382 1.104.718.336.336.544.656.718 1.104.131.338.287.847.33 1.783.046 1.012.056 1.316.056 3.879 0 2.563-.01 2.867-.056 3.88-.043.935-.199 1.444-.33 1.782a2.974 2.974 0 0 1-.719 1.104 2.974 2.974 0 0 1-1.103.718c-.339.131-.847.288-1.783.33-1.012.046-1.316.056-3.88.056-2.563 0-2.866-.01-3.878-.056-.936-.042-1.445-.199-1.783-.33a2.974 2.974 0 0 1-1.104-.718 2.974 2.974 0 0 1-.718-1.104c-.131-.338-.288-.847-.33-1.783-.047-1.012-.056-1.316-.056-3.879 0-2.563.01-2.867.056-3.88.042-.935.199-1.443.33-1.782.174-.448.382-.768.718-1.104a2.974 2.974 0 0 1 1.104-.718c.338-.131.847-.288 1.783-.33C9.133 4.14 9.437 4.13 12 4.13Zm0 11.07a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm0-8.13a4.93 4.93 0 1 0 0 9.86 4.93 4.93 0 0 0 0-9.86Zm6.276-.194a1.152 1.152 0 1 1-2.304 0 1.152 1.152 0 0 1 2.304 0Z"/>
-                    </svg>
-                </a>
-                <a href="https://youtube.com/@manovastra?si=sxLAZ4BubtdzOqu8" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="YouTube">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.44 5.243c.929.244 1.66.963 1.909 1.876.451 1.654.451 5.106.451 5.106s0 3.452-.451 5.106a2.681 2.681 0 0 1-1.91 1.876c-1.684.443-8.439.443-8.439.443s-6.754 0-8.439-.443a2.682 2.682 0 0 1-1.91-1.876c-.45-1.654-.45-5.106-.45-5.106s0-3.452.45-5.106a2.681 2.681 0 0 1 1.91-1.876c1.685-.443 8.44-.443 8.44-.443s6.754 0 8.438.443Zm-5.004 6.982L9.792 15.36V9.091l5.646 3.134Z"/>
-                    </svg>
-                </a>
-                <a href="https://wa.me/919353823619" target="_blank" rel="noopener noreferrer" class="social-link social-whatsapp" aria-label="WhatsApp">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                    </svg>
-                </a>
-            </div>
-
-            <!-- Copyright -->
-            <div class="footer-bottom">
-                <p>&copy; 2025 Manovastra. All Rights Reserved. | Designed for Modern Women</p>
-            </div>
+        <div class="container">
+            <p>&copy; 2025 Manovastra. All Rights Reserved.</p>
         </div>
-    </div>
+    </footer>
 
-    <!-- Floating Admin Button -->
-    <a href="/manovastra-secure-admin-2025/" class="floating-admin-btn" title="Admin Panel" aria-label="Admin Panel">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/>
-        </svg>
-    </a>
-</footer>
+    <!-- ✅ ALL SCRIPTS HERE (Before </body>) -->
+    <script>
+        // ✅ Global variable to store selected image
+        let selectedColorImage = '{{ product.image.url }}';
 
-    <!-- ✅ Add this before </body> tag -->
-<script>
-// CSRF Token
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-// Add to Cart Function
-document.addEventListener('DOMContentLoaded', function() {
-    const addToCartBtn = document.getElementById('addToCartBtn');
-    
-    if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', function() {
-            const productId = this.dataset.productId;
+        // ✅ Change product image based on color selection
+        function changeProductImage(imageUrl, buttonElement) {
+            // Update main image
+            document.getElementById('mainProductImage').src = imageUrl;
             
-            // Disable button during request
-            this.disabled = true;
-            this.innerHTML = 'Adding...';
+            // ✅ Store selected image URL
+            selectedColorImage = imageUrl;
+            console.log('Color selected, image stored:', imageUrl);
             
-            fetch(`/cart/add/${productId}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': getCookie('csrftoken'),
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'quantity=1'
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Re-enable button
-                this.disabled = false;
-                this.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px; vertical-align: middle;">
-                    <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Z" stroke="currentColor" stroke-width="1.5"/>
-                </svg>Add to Cart`;
-                
-                if (data.success) {
-                    updateCartCount();
-                    showNotification(data.message, 'success');
-                } else {
-                    showNotification(data.message, 'error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                this.disabled = false;
-                this.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="margin-right: 8px; vertical-align: middle;">
-                    <path d="M4.75 8.25A.75.75 0 0 0 4 9L3 19.125c0 1.418 1.207 2.625 2.625 2.625h12.75c1.418 0 2.625-1.149 2.625-2.566L20 9a.75.75 0 0 0-.75-.75H4.75Z" stroke="currentColor" stroke-width="1.5"/>
-                </svg>Add to Cart`;
-                showNotification('Failed to add to cart', 'error');
+            // Update active button
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
-        });
-    }
-    
-    // Update cart count on page load
-    updateCartCount();
-});
+            buttonElement.classList.add('active');
+        }
 
-// Update Cart Count
-function updateCartCount() {
-    fetch('/cart/count/')
-        .then(response => response.json())
-        .then(data => {
-            const countElement = document.getElementById('cartCount');
-            if (countElement) {
-                countElement.textContent = data.count;
-                if (data.count > 0) {
-                    countElement.style.display = 'flex';
-                } else {
-                    countElement.style.display = 'none';
+        // CSRF Token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
                 }
             }
-        })
-        .catch(error => console.error('Cart count error:', error));
-}
+            return cookieValue;
+        }
 
-// Show Notification
-function showNotification(message, type) {
-    // Remove existing notifications
-    const existingNotifs = document.querySelectorAll('.notification');
-    existingNotifs.forEach(n => n.remove());
-    
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#4caf50' : '#f44336'};
-        color: white;
-        padding: 15px 25px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        z-index: 10000;
-        font-weight: 600;
-        animation: slideInRight 0.3s ease;
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
-}
+        // ✅ Page Load - Setup Buy Now Button
+        document.addEventListener('DOMContentLoaded', function() {
+            // Buy Now Button Handler
+            const buyNowBtn = document.getElementById('buyNowBtn');
+            
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Store selected image in sessionStorage
+                    sessionStorage.setItem('selectedProductImage', selectedColorImage);
+                    console.log('Buy Now clicked! Image saved to sessionStorage:', selectedColorImage);
+                    
+                    // Redirect to order summary
+                    window.location.href = this.href;
+                });
+            }
 
-// Add animation styles
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(400px);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-</script>
-
+            // Add to Cart Button Handler
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            
+            if (addToCartBtn) {
+                addToCartBtn.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    this.disabled = true;
+                    this.innerHTML = 'Adding...';
+                    
+                    fetch(`/cart/add/${productId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': getCookie('csrftoken'),
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: 'quantity=1'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.disabled = false;
+                        this.innerHTML = 'Add to Cart';
+                        
+                        if (data.success) {
+                            alert(data.message);
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        this.disabled = false;
+                        this.innerHTML = 'Add to Cart';
+                        alert('Failed to add to cart');
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

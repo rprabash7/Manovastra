@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 
 
+
 class Slide(models.Model):
     title = models.CharField(max_length=200, blank=True)
     description = models.TextField(blank=True)
@@ -21,9 +22,6 @@ class Slide(models.Model):
         return f"Slide {self.order} - {self.title or 'No Title'}"
 
 
-# ============================================
-# ✅ NEW FRESH MODELS START HERE
-# ============================================
 
 class Category(models.Model):
     """Product Categories"""
@@ -47,6 +45,7 @@ class Category(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
 
 
 class Product(models.Model):
@@ -133,6 +132,25 @@ class Product(models.Model):
         return self.stock_quantity > 0
 
 
+
+class ProductImage(models.Model):
+    """Product images by color"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='color_images')
+    color = models.CharField(max_length=50, help_text="Color name")
+    image = models.ImageField(upload_to='products/colors/')
+    is_default = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ['order']
+        verbose_name = "Product Image"
+        verbose_name_plural = "Product Images"
+    
+    def __str__(self):
+        return f"{self.product.name} - {self.color}"
+
+
+
 class Testimonial(models.Model):
     customer_name = models.CharField(max_length=100)
     customer_image = models.ImageField(upload_to='testimonials/', blank=True, null=True)
@@ -151,6 +169,7 @@ class Testimonial(models.Model):
     
     def __str__(self):
         return f"{self.customer_name} - {self.rating}★"
+
 
 
 class Order(models.Model):
@@ -201,7 +220,7 @@ class Order(models.Model):
     # Admin Notes
     admin_notes = models.TextField(blank=True, help_text="Internal notes for admin")
     
-    # ✅ Policy Agreement (NEW FIELDS)
+    # Policy Agreement
     policy_agreed = models.BooleanField(default=False, help_text="Customer agreed to no-return policy")
     policy_agreed_at = models.DateTimeField(null=True, blank=True, help_text="When policy was agreed")
     
@@ -230,7 +249,7 @@ class Order(models.Model):
     def status_display(self):
         return dict(self.STATUS_CHOICES).get(self.status, self.status)
 
-    
+
 
 class Wishlist(models.Model):
     session_key = models.CharField(max_length=255, db_index=True)
@@ -240,9 +259,12 @@ class Wishlist(models.Model):
     class Meta:
         unique_together = ['session_key', 'product']
         ordering = ['-created_at']
+        verbose_name = "Wishlist Item"
+        verbose_name_plural = "Wishlist Items"
     
     def __str__(self):
         return f"{self.session_key} - {self.product.name}"
+
 
 
 class Cart(models.Model):
@@ -255,6 +277,8 @@ class Cart(models.Model):
     class Meta:
         unique_together = ['session_key', 'product']
         ordering = ['-created_at']
+        verbose_name = "Cart Item"
+        verbose_name_plural = "Cart Items"
     
     def __str__(self):
         return f"{self.product.name} x {self.quantity}"

@@ -5,10 +5,13 @@ from django.core.exceptions import ValidationError
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.db.models import Q
+from django.utils import timezone
+from decimal import Decimal
 import razorpay
 import json
 
-from .models import Slide, Category, Product, Testimonial, Cart, Order
+from .models import Slide, Category, Product, Testimonial, Cart, Order, Wishlist
 
 
 # Initialize Razorpay client
@@ -18,7 +21,7 @@ razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZOR
 def welcome(request):
     """Homepage view"""
     slides = Slide.objects.filter(is_active=True)[:5]
-    occasions = Category.objects.filter(is_active=True)[:4]
+    occasions = Category.objects.filter(is_active=True)
     bestsellers = Product.objects.filter(is_bestseller=True, is_active=True)[:8]
     ready_to_wear = Product.objects.filter(is_ready_to_wear=True, is_active=True)[:8]
     wedding_products = Product.objects.filter(is_wedding=True, is_active=True)[:8]
@@ -38,15 +41,19 @@ def product_detail(request, slug):
     """Product detail page"""
     product = get_object_or_404(Product, slug=slug, is_active=True)
     
+    # Get color images
+    color_images = product.color_images.all()
+    available_colors = color_images.values_list('color', flat=True).distinct()
+    
     return render(request, 'product_detail.html', {
         'product': product,
+        'color_images': color_images,
+        'available_colors': available_colors,
     })
 
 
 def category_products(request, category_slug):
     """Display products filtered by category"""
-    
-    # Try to get category by slug
     category = None
     products = Product.objects.filter(is_active=True)
     
@@ -63,7 +70,6 @@ def category_products(request, category_slug):
     elif category_slug == 'latest':
         category_name = 'Latest Collection'
     else:
-        # Get category by slug
         try:
             category = Category.objects.get(slug=category_slug, is_active=True)
             products = products.filter(category=category)
@@ -81,7 +87,6 @@ def category_products(request, category_slug):
     })
 
 
-
 def order_summary(request, slug):
     """Order summary page - Buy Now"""
     product = get_object_or_404(Product, slug=slug, is_active=True)
@@ -92,24 +97,19 @@ def order_summary(request, slug):
     })
 
 
-# ✅ FIXED - CREATE RAZORPAY ORDER
 @csrf_exempt
 def create_order(request):
     """Create Razorpay order"""
     if request.method == 'POST':
         try:
-            # Parse JSON data
             data = json.loads(request.body.decode('utf-8'))
             amount = data.get('amount', 0)
             
-            # Validate amount
             if not amount or float(amount) <= 0:
                 return JsonResponse({'error': 'Invalid amount'}, status=400)
             
-            # Convert to paise (Razorpay needs amount in smallest currency unit)
             amount_in_paise = int(float(amount) * 100)
             
-            # Create Razorpay order
             order_data = {
                 'amount': amount_in_paise,
                 'currency': 'INR',
@@ -118,7 +118,6 @@ def create_order(request):
             
             razorpay_order = razorpay_client.order.create(data=order_data)
             
-            # Store order details in session
             request.session['pending_order'] = {
                 'order_data': data,
                 'razorpay_order_id': razorpay_order['id']
@@ -140,7 +139,6 @@ def create_order(request):
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-# ✅ FIXED - VERIFY PAYMENT
 @csrf_exempt
 def verify_payment(request):
     """Verify Razorpay payment"""
@@ -148,7 +146,6 @@ def verify_payment(request):
         try:
             data = json.loads(request.body.decode('utf-8'))
             
-            # Verify signature
             params_dict = {
                 'razorpay_order_id': data.get('razorpay_order_id'),
                 'razorpay_payment_id': data.get('razorpay_payment_id'),
@@ -157,26 +154,48 @@ def verify_payment(request):
             
             razorpay_client.utility.verify_payment_signature(params_dict)
             
-            # Payment verified successfully
-            order_id = data.get('razorpay_order_id')
+            product = Product.objects.get(slug=data.get('product_slug'))
             
-            # Clear session
+            order = Order.objects.create(
+                order_id=data.get('razorpay_order_id'),
+                razorpay_order_id=data.get('razorpay_order_id'),
+                razorpay_payment_id=data.get('razorpay_payment_id'),
+                razorpay_signature=data.get('razorpay_signature'),
+                
+                customer_name=data.get('full_name'),
+                customer_email=data.get('email'),
+                customer_phone=data.get('phone'),
+                
+                address=data.get('address'),
+                city=data.get('city'),
+                state=data.get('state'),
+                pincode=data.get('pincode'),
+                
+                product=product,
+                quantity=int(data.get('quantity', 1)),
+                product_price=product.sale_price,
+                total_amount=data.get('amount'),
+                
+                status='confirmed',
+                payment_date=timezone.now()
+            )
+            
             if 'pending_order' in request.session:
                 del request.session['pending_order']
             
             return JsonResponse({
                 'success': True,
-                'order_id': order_id
+                'order_id': order.order_id
             })
             
         except razorpay.errors.SignatureVerificationError as e:
             print(f"Signature Verification Error: {e}")
             return JsonResponse({'success': False, 'error': 'Payment verification failed'}, status=400)
         except Exception as e:
-            print(f"Error verifying payment: {e}")
+            print(f"Error: {e}")
             return JsonResponse({'success': False, 'error': str(e)}, status=400)
     
-    return JsonResponse({'error': 'Invalid request method'}, status=400)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def order_success(request):
@@ -205,71 +224,6 @@ def subscribe_newsletter(request):
     
     return redirect('welcome')
 
-# Update verify_payment function to save order
-
-@csrf_exempt
-def verify_payment(request):
-    """Verify Razorpay payment"""
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body.decode('utf-8'))
-            
-            # Verify signature
-            params_dict = {
-                'razorpay_order_id': data.get('razorpay_order_id'),
-                'razorpay_payment_id': data.get('razorpay_payment_id'),
-                'razorpay_signature': data.get('razorpay_signature')
-            }
-            
-            razorpay_client.utility.verify_payment_signature(params_dict)
-            
-            # ✅ SAVE ORDER TO DATABASE
-            from .models import Order
-            from django.utils import timezone
-            
-            product = Product.objects.get(slug=data.get('product_slug'))
-            
-            order = Order.objects.create(
-                order_id=data.get('razorpay_order_id'),
-                razorpay_order_id=data.get('razorpay_order_id'),
-                razorpay_payment_id=data.get('razorpay_payment_id'),
-                razorpay_signature=data.get('razorpay_signature'),
-                
-                customer_name=data.get('full_name'),
-                customer_email=data.get('email'),
-                customer_phone=data.get('phone'),
-                
-                address=data.get('address'),
-                city=data.get('city'),
-                state=data.get('state'),
-                pincode=data.get('pincode'),
-                
-                product=product,
-                quantity=int(data.get('quantity', 1)),
-                product_price=product.sale_price,
-                total_amount=data.get('amount'),
-                
-                status='confirmed',
-                payment_date=timezone.now()
-            )
-            
-            # Clear session
-            if 'pending_order' in request.session:
-                del request.session['pending_order']
-            
-            return JsonResponse({
-                'success': True,
-                'order_id': order.order_id
-            })
-            
-        except Exception as e:
-            print(f"Error: {e}")
-            return JsonResponse({'success': False, 'error': str(e)}, status=400)
-    
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-from django.http import JsonResponse
-from django.db.models import Q
 
 def search_products(request):
     query = request.GET.get('q', '').strip()
@@ -277,13 +231,12 @@ def search_products(request):
     if not query or len(query) < 2:
         return JsonResponse({'products': [], 'count': 0})
     
-    # Search in product name, description, category
     products = Product.objects.filter(
         Q(name__icontains=query) |
         Q(description__icontains=query) |
         Q(category__name__icontains=query) |
         Q(fabric__icontains=query)
-    ).filter(is_active=True)[:10]  # Limit to 10 results
+    ).filter(is_active=True)[:10]
     
     results = []
     for product in products:
@@ -304,15 +257,12 @@ def search_products(request):
     })
 
 
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
-from .models import Wishlist
-
 def get_session_key(request):
     """Get or create session key"""
     if not request.session.session_key:
         request.session.create()
     return request.session.session_key
+
 
 def add_to_wishlist(request, product_id):
     """Add product to wishlist"""
@@ -320,7 +270,6 @@ def add_to_wishlist(request, product_id):
         product = get_object_or_404(Product, id=product_id, is_active=True)
         session_key = get_session_key(request)
         
-        # Check if already in wishlist
         wishlist_item, created = Wishlist.objects.get_or_create(
             session_key=session_key,
             product=product
@@ -343,6 +292,7 @@ def add_to_wishlist(request, product_id):
         })
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
+
 
 def remove_from_wishlist(request, product_id):
     """Remove product from wishlist"""
@@ -372,6 +322,7 @@ def remove_from_wishlist(request, product_id):
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
 
+
 def wishlist_page(request):
     """Display wishlist page"""
     session_key = get_session_key(request)
@@ -382,15 +333,13 @@ def wishlist_page(request):
         'wishlist_count': wishlist_items.count()
     })
 
+
 def get_wishlist_count(request):
     """Get wishlist count for AJAX"""
     session_key = get_session_key(request)
     count = Wishlist.objects.filter(session_key=session_key).count()
     return JsonResponse({'count': count})
 
-
-
-from decimal import Decimal
 
 def add_to_cart(request, product_id):
     """Add product to cart"""
@@ -400,14 +349,12 @@ def add_to_cart(request, product_id):
         
         quantity = int(request.POST.get('quantity', 1))
         
-        # Check stock
         if quantity > product.stock_quantity:
             return JsonResponse({
                 'success': False,
                 'message': 'Not enough stock available'
             })
         
-        # Get or create cart item
         cart_item, created = Cart.objects.get_or_create(
             session_key=session_key,
             product=product,
@@ -415,7 +362,6 @@ def add_to_cart(request, product_id):
         )
         
         if not created:
-            # Update quantity
             cart_item.quantity += quantity
             if cart_item.quantity > product.stock_quantity:
                 cart_item.quantity = product.stock_quantity
@@ -433,6 +379,7 @@ def add_to_cart(request, product_id):
         })
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
+
 
 def update_cart(request, product_id):
     """Update cart item quantity"""
@@ -474,6 +421,7 @@ def update_cart(request, product_id):
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
 
+
 def remove_from_cart(request, product_id):
     """Remove product from cart"""
     if request.method == 'POST':
@@ -502,12 +450,12 @@ def remove_from_cart(request, product_id):
     
     return JsonResponse({'success': False, 'message': 'Invalid request'})
 
+
 def cart_page(request):
     """Display cart page"""
     session_key = get_session_key(request)
     cart_items = Cart.objects.filter(session_key=session_key).select_related('product')
     
-    # Calculate totals
     subtotal = sum(item.subtotal for item in cart_items)
     shipping = Decimal('0.00') if subtotal > 1000 else Decimal('1.00')
     total = subtotal + shipping
@@ -520,11 +468,13 @@ def cart_page(request):
         'total': total
     })
 
+
 def get_cart_count(request):
     """Get cart count for AJAX"""
     session_key = get_session_key(request)
     count = Cart.objects.filter(session_key=session_key).count()
     return JsonResponse({'count': count})
+
 
 def get_cart_data(session_key):
     """Helper function to get cart data"""
@@ -540,11 +490,11 @@ def get_cart_data(session_key):
         'total': str(total)
     }
 
+
 def my_orders(request):
     """Display customer orders"""
     session_key = get_session_key(request)
     
-    # Get orders by email or phone (stored in session)
     customer_email = request.session.get('customer_email', '')
     customer_phone = request.session.get('customer_phone', '')
     
@@ -560,6 +510,7 @@ def my_orders(request):
         'orders_count': orders.count()
     })
 
+
 def order_detail(request, order_id):
     """Display order detail"""
     order = get_object_or_404(Order, order_id=order_id)
@@ -567,6 +518,7 @@ def order_detail(request, order_id):
     return render(request, 'order_detail.html', {
         'order': order
     })
+
 
 def track_order(request):
     """Track order by order ID"""

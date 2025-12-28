@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from .models import Slide, Category, Product, Testimonial, Order
+from .models import Slide, Category, Product, ProductImage, Testimonial, Order
+
 
 
 # Banner Slides Admin
@@ -21,6 +22,7 @@ class SlideAdmin(admin.ModelAdmin):
             )
         return "No Image"
     image_preview.short_description = "Preview"
+
 
 
 # Category Admin
@@ -44,9 +46,20 @@ class CategoryAdmin(admin.ModelAdmin):
     product_count.short_description = "Products"
 
 
+
+# ProductImage Inline (for Product Admin)
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    fields = ['color', 'image', 'is_default', 'order']
+
+
+
 # Product Admin
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductImageInline]
+    
     list_display = [
         'image_preview',
         'name',
@@ -92,6 +105,25 @@ class ProductAdmin(admin.ModelAdmin):
         return "No Image"
     image_preview.short_description = "Image"
 
+
+
+# ProductImage Admin (separate management)
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = ['product', 'color', 'image_preview', 'is_default', 'order']
+    list_filter = ['color', 'is_default']
+    search_fields = ['product__name', 'color']
+    list_editable = ['is_default', 'order']
+    ordering = ['product', 'order']
+    
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;" />', obj.image.url)
+        return "No Image"
+    image_preview.short_description = "Preview"
+
+
+
 # Testimonials Admin
 @admin.register(Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
@@ -100,6 +132,7 @@ class TestimonialAdmin(admin.ModelAdmin):
     list_filter = ['rating', 'is_featured', 'is_active', 'created_at']
     search_fields = ['customer_name', 'location', 'review_text', 'purchase_product']
     ordering = ['-created_at']
+
 
 
 # Orders Admin
@@ -210,9 +243,9 @@ class OrderAdmin(admin.ModelAdmin):
     mark_delivered.short_description = "Mark selected as Delivered"
 
 
+
 # Customize Admin Site
 admin.site.site_header = "Manovastra Admin Panel"
 admin.site.site_title = "Manovastra"
 admin.site.index_title = "Dashboard"
-
-admin.site.enable_nav_sidebar = True  # Django 3.1+ sidebar navigation
+admin.site.enable_nav_sidebar = True

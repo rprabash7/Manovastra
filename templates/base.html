@@ -317,8 +317,7 @@
             <img src="{% static 'images/decorative-bottom.png' %}" alt="" class="heading-decoration">
         </div>
 
-
-        <!-- Occasion Grid -->
+        <!-- Occasion Grid - ALL CATEGORIES -->
         <div class="occasion-grid">
             {% for occasion in occasions %}
             <a href="{% url 'category_products' occasion.slug %}" class="occasion-card">
